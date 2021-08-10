@@ -13,5 +13,5 @@
     "baseUrl": "./",
     "incremental": true
   },
-  "exclude": ["node_modules", "dist", "graphql"]
+  "exclude": ["node_modules", "dist"]
 }
