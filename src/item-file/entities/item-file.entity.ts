@@ -1,35 +1,21 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { TireBrand, TireMade, TirePattern, TireSize } from '@prisma/client';
 
 export class TireItemFile {
-  id                :String 
-  brand             :TireBrand
-  size              :TireSize
-  pattern           :TirePattern
-  dateOfManufacture :Date
-  made              :TireMade
-  createdAt         :Date   
-  updatedAt         :Date    
-}
+  @ApiProperty({example: 'cksap55v40000mssb41hik5dz'})
+  id: string;
 
-enum TireBrand {
-  BRIDGESTONE,
-  MICHELIN,
-  DUNLOP,
-  SERVICE,
-  YOKOHAMA
-}
+  @ApiProperty({enum: TireBrand})
+  brand: TireBrand;
+  
+  @ApiProperty({enum: TireSize})
+  size: TireSize;
 
-enum TireSize {
-  ONESEVENFIVE_SEVENTY,
-  ONEEIGHTFIVE_EIGHTYFIVE
-}
+  @ApiProperty({enum: TirePattern})
+  pattern: TirePattern;
 
-enum TirePattern {
-  CAMBER,
-  CUP
-}
-
-enum TireMade {
-  PAKISTAN,
-  JAPAN,
-  INDONESIA
+  @ApiProperty({enum: TireMade})
+  made: TireMade;
+  createdAt: Date;
+  updatedAt: Date;
 }
