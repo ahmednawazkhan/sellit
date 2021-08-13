@@ -9,8 +9,8 @@ const config: Config = {
   },
   swagger: {
     enabled: true,
-    title: 'Nestjs FTW',
-    description: 'The nestjs API description',
+    title: 'Sell It',
+    description: 'rest api for tires inventory and selling system',
     version: '1.5',
     path: 'api',
   },
