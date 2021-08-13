@@ -2,9 +2,10 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { ItemFileService } from './item-file.service';
 import { CreateItemFileDto } from './dto/create-item-file.dto';
 import { UpdateItemFileDto } from './dto/update-item-file.dto';
-import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { TireItemFile } from './entities/item-file.entity';
 
+@ApiTags('Tire Item File')
 @Controller('item-file')
 export class ItemFileController {
   constructor(private readonly itemFileService: ItemFileService) {}
