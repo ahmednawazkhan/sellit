@@ -1,8 +1,8 @@
 {
-  "name": "nestjs-prisma-client-starter",
+  "name": "sell-it",
   "version": "0.0.1",
-  "description": "NestJS Prisma Client Starter Project",
-  "author": "Marc Stammerjohann",
+  "description": "supply chain management system for a tire seller",
+  "author": "Ahmed Nawaz Khan",
   "license": "MIT",
   "keywords": [
     "NestJS",
@@ -12,10 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/fivethree-team/nestjs-prisma-client-example.git"
-  },
-  "bugs": {
-    "url": "https://github.com/fivethree-team/nestjs-prisma-client-example/issues"
+    "url": "https://github.com/ahmednawazkhan/sellit"
   },
   "scripts": {
     "prebuild": "rimraf dist",
