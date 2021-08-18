@@ -31,11 +31,46 @@ Table TireItemFile {
   size TireSize [not null]
   pattern TirePattern [not null]
   made TireMade [not null]
+  tires Tire [not null]
   createdAt DateTime [default: `now()`, not null]
   updatedAt DateTime [not null]
 
   indexes {
     (brand, size, pattern, made) [unique]
+  }
+}
+
+Table PurchaseBill {
+  id String [pk]
+  totalCost Int [not null]
+  advancePaid Int [not null]
+  tireQuantity Int [not null]
+  costPaid Int [not null]
+  vendor Vendor [not null]
+  vendor_id String [not null]
+}
+
+Table Vendor {
+  id String [pk]
+  name String [not null]
+  description String
+  type VendorType [not null]
+  purchaseBills PurchaseBill [not null]
+}
+
+Table Tire {
+  id String [pk]
+  itemFile TireItemFile [not null]
+  itemFileId String [not null]
+  dateOfManufacture DateTime [not null]
+  quantity Int [not null]
+  sellingPrice Int [not null]
+  purchasePrice Int [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+
+  indexes {
+    (itemFileId, dateOfManufacture) [unique]
   }
 }
 
@@ -68,4 +103,13 @@ Enum TireMade {
   INDONESIA
 }
 
+Enum VendorType {
+  LOCAL
+  IMPORT
+}
+
 Ref: Post.authorId > User.id
+
+Ref: PurchaseBill.vendor_id > Vendor.id
+
+Ref: Tire.itemFileId > TireItemFile.id

@@ -46,10 +46,43 @@ model TireItemFile {
   size      TireSize
   pattern   TirePattern
   made      TireMade
+  tires     Tire[]
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
   @@unique([brand, size, pattern, made], name: "brand_size_pattern_made")
+}
+
+model PurchaseBill {
+  id           String @id @default(cuid())
+  totalCost    Int
+  advancePaid  Int
+  tireQuantity Int
+  costPaid     Int
+  vendor       Vendor @relation(fields: [vendor_id], references: [id])
+  vendor_id    String
+}
+
+model Vendor {
+  id            String         @id @default(cuid())
+  name          String
+  description   String?
+  type          VendorType
+  purchaseBills PurchaseBill[]
+}
+
+model Tire {
+  id                String       @id @default(cuid())
+  itemFile          TireItemFile @relation(fields: [itemFileId], references: [id])
+  itemFileId        String
+  dateOfManufacture DateTime
+  quantity          Int
+  sellingPrice      Int
+  purchasePrice     Int
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  @@unique([itemFileId, dateOfManufacture], name: "itemFile_dateOfManufacture")
 }
 
 enum TireBrand {
@@ -74,4 +107,9 @@ enum TireMade {
   PAKISTAN
   JAPAN
   INDONESIA
+}
+
+enum VendorType {
+  LOCAL
+  IMPORT
 }
