@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './controllers/app.controller';
-import { AppService } from './services/app.service';
 import { DateScalar } from './common/scalars/date.scalar';
 import { ConfigModule } from '@nestjs/config';
 import { ItemFileModule } from './item-file/item-file.module';
@@ -15,7 +13,6 @@ import { VendorModule } from './vendor/vendor.module';
     VendorModule,
     PrismaModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, DateScalar],
+  providers: [DateScalar],
 })
 export class AppModule {}

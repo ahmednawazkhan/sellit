@@ -5,7 +5,7 @@ import { Chance } from 'chance';
 import { INestApplication } from '@nestjs/common';
 const chance = new Chance();
 
-describe('AppResolver (e2e)', () => {
+describe('AppController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -17,13 +17,10 @@ describe('AppResolver (e2e)', () => {
     await app.init();
   });
 
-  it('helloWorld (Query)', () => {
-    // TODO assert return value
+  it('/ (GET)', () => {
     return request(app.getHttpServer())
-      .post('/graphql')
-      .send({
-        query: '{ helloWorld }',
-      })
-      .expect(200);
+      .get('/')
+      .expect(200)
+      .expect('Hello World!');
   });
 });
