@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { TireBrand, TireMade, TirePattern, TireSize } from '@prisma/client';
-import { IsDate, IsEnum, IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
 
 
 // export type CreateItemFileDto = Omit<TireItemFile, 'createdAt' | 'updatedAt' | 'id'>;

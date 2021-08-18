@@ -8,33 +8,22 @@ export class ItemFileService {
   constructor(private readonly itemFileRepository: ItemFileRepository) {}
 
   create(createItemFileDto: CreateItemFileDto) {
-    return this.itemFileRepository.create({ data: createItemFileDto });
+    return this.itemFileRepository.create(createItemFileDto);
   }
 
   findAll() {
-    return this.itemFileRepository.findMany();
+    return this.itemFileRepository.findAll();
   }
 
   findOne(id: string) {
-    return this.itemFileRepository.findUnique({ where: { id } });
+    return this.itemFileRepository.findOne(id);
   }
 
   update(id: string, updateItemFileDto: UpdateItemFileDto) {
-    return this.itemFileRepository.update({
-      where: {
-        id
-      },
-      data: {
-        ...updateItemFileDto
-      }
-    })
+    return this.itemFileRepository.update(id, updateItemFileDto);
   }
 
   remove(id: string) {
-    return this.itemFileRepository.delete({
-      where: {
-        id
-      }
-    });
+    return this.itemFileRepository.remove(id);
   }
 }

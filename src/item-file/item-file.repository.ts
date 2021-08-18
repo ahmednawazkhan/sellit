@@ -1,14 +1,40 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateItemFileDto } from './dto/create-item-file.dto';
+import { UpdateItemFileDto } from './dto/update-item-file.dto';
 
 @Injectable()
 export class ItemFileRepository {
-    update = this.prisma.tireItemFile.update;
-    findUnique = this.prisma.tireItemFile.findUnique;
-    findMany = this.prisma.tireItemFile.findMany;
-    create = this.prisma.tireItemFile.create;
-    count = this.prisma.tireItemFile.count;
-    delete = this.prisma.tireItemFile.delete;
+  constructor(private readonly prisma: PrismaService) {}
 
-    constructor(private readonly prisma: PrismaService) {}
+  create(createItemFileDto: CreateItemFileDto) {
+    return this.prisma.tireItemFile.create({ data: createItemFileDto });
+  }
+
+  findAll() {
+    return this.prisma.tireItemFile.findMany();
+  }
+
+  findOne(id: string) {
+    return this.prisma.tireItemFile.findUnique({ where: { id } });
+  }
+
+  update(id: string, updateItemFileDto: UpdateItemFileDto) {
+    return this.prisma.tireItemFile.update({
+      where: {
+        id,
+      },
+      data: {
+        ...updateItemFileDto,
+      },
+    });
+  }
+
+  remove(id: string) {
+    return this.prisma.tireItemFile.delete({
+      where: {
+        id,
+      },
+    }).catch(_ => {});
+  }
 }
