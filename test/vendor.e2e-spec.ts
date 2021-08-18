@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { VendorType } from '@prisma/client';
 import { Vendor } from 'src/vendor/entities/vendor.entity';
@@ -11,7 +11,7 @@ describe('Vendor (e2e)', () => {
   let app: INestApplication;
   let vendorService: VendorService;
   // TODO: see if route can come from Reflection
-  let basePath = '/vendor/';
+  let basePath = '/vendor';
   let defaultVendor: Vendor;
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -55,7 +55,7 @@ describe('Vendor (e2e)', () => {
 
   it('should return vendor with provided id (GET)', () => {
     return request(app.getHttpServer())
-      .get(`${basePath}${defaultVendor.id}`)
+      .get(`${basePath}/${defaultVendor.id}`)
       .expect(200)
       .expect((res) => {
         expect(res.body).toHaveProperty('createdAt');
@@ -68,13 +68,25 @@ describe('Vendor (e2e)', () => {
       );
   });
 
+  it('should return 404 if provided id is incorrect (GET)', () => {
+    return request(app.getHttpServer())
+      .get(`${basePath}/abc`)
+      .expect(404)
+      .expect(({ body }) => {
+        expect(body).toHaveProperty('message');
+      })
+      .expect(({ body }) => {
+        expect(body).toHaveProperty('error');
+      });
+  });
+
   it('should create vendor with provided data (POST)', async () => {
     const vendorTwo = {
       ...createVendorMock,
       name: 'Vendor Two',
     };
     const { body: vendorTwoResponse } = await request(app.getHttpServer())
-      .post(`${basePath}`)
+      .post(`${basePath}/`)
       .send(vendorTwo)
       .expect(201)
       .expect((res) => {
@@ -87,7 +99,6 @@ describe('Vendor (e2e)', () => {
         expect(res.body).toHaveProperty('updatedAt');
       });
     const dbVendorTwo = await vendorService.findOne(vendorTwoResponse.id);
-
     return expect(dbVendorTwo).toEqual(expect.objectContaining(vendorTwo));
   });
 
@@ -97,8 +108,8 @@ describe('Vendor (e2e)', () => {
       description: 'Some description Again',
       type: VendorType.IMPORT,
     };
-    const { body: vendorTwoResponse } = await request(app.getHttpServer())
-      .patch(`${basePath}${defaultVendor.id}`)
+    await request(app.getHttpServer())
+      .patch(`${basePath}/${defaultVendor.id}`)
       .send(vendorTwo)
       .expect(200)
       .expect((res) => {
@@ -113,5 +124,32 @@ describe('Vendor (e2e)', () => {
     const dbDefaultVendor = await vendorService.findOne(defaultVendor.id);
 
     return expect(dbDefaultVendor).toEqual(expect.objectContaining(vendorTwo));
+  });
+
+  it('should delete vendor against an id (DELETE)', async () => {
+    const defaultVendorClone = {
+      ...defaultVendor,
+      createdAt: defaultVendor.createdAt.toISOString(),
+      updatedAt: defaultVendor.updatedAt.toISOString(),
+    };
+    await request(app.getHttpServer())
+      .delete(`${basePath}/${defaultVendor.id}`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toStrictEqual(defaultVendorClone);
+      });
+
+    return expect(vendorService.findOne(defaultVendor.id)).rejects.toThrow(
+      'No Vendor found'
+    );
+  });
+
+  it('should return 200 when deleting vendor that does not exist (DELETE)', async () => {
+    return request(app.getHttpServer())
+      .delete(`${basePath}/abc`)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toEqual({});
+      });
   });
 });

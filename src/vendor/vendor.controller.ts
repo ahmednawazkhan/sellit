@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
@@ -12,7 +20,7 @@ export class VendorController {
 
   @ApiOkResponse({
     type: Vendor,
-    description: 'get vendor by given id'
+    description: 'get vendor by given id',
   })
   @Post()
   create(@Body() createVendorDto: CreateVendorDto) {
@@ -22,7 +30,7 @@ export class VendorController {
   @ApiOkResponse({
     isArray: true,
     type: Vendor,
-    description: "get all tire vendors"
+    description: 'get all tire vendors',
   })
   @Get()
   findAll() {
@@ -31,7 +39,7 @@ export class VendorController {
 
   @ApiOkResponse({
     type: Vendor,
-    description: 'get vendor by given id'
+    description: 'get vendor by given id',
   })
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -40,7 +48,7 @@ export class VendorController {
 
   @ApiOkResponse({
     type: Vendor,
-    description: 'updated vendor with given id'
+    description: 'updated vendor with given id',
   })
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateVendorDto: UpdateVendorDto) {
@@ -49,7 +57,7 @@ export class VendorController {
 
   @ApiOkResponse({
     type: Vendor,
-    description: 'delete vendor with given id'
+    description: 'delete vendor with given id',
   })
   @Delete(':id')
   remove(@Param('id') id: string) {

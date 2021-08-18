@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateItemFileDto } from './dto/create-item-file.dto';
 import { UpdateItemFileDto } from './dto/update-item-file.dto';
@@ -16,7 +16,11 @@ export class ItemFileRepository {
   }
 
   findOne(id: string) {
-    return this.prisma.tireItemFile.findUnique({ where: { id } });
+    return this.prisma.tireItemFile
+      .findUnique({ where: { id }, rejectOnNotFound: true })
+      .catch((e) => {
+        throw new NotFoundException(e.message);
+      });
   }
 
   update(id: string, updateItemFileDto: UpdateItemFileDto) {

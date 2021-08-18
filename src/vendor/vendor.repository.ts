@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
@@ -16,7 +16,14 @@ export class VendorRepository {
   }
 
   findOne(id: string) {
-    return this.prisma.vendor.findUnique({ where: { id } });
+    return this.prisma.vendor
+      .findUnique({
+        where: { id },
+        rejectOnNotFound: true,
+      })
+      .catch((e) => {
+        throw new NotFoundException(e.message);
+      });
   }
 
   update(id: string, updateVendorDto: UpdateVendorDto) {
