@@ -1,6 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TireBrand, TireMade, VendorType } from '@prisma/client';
+import { TireBrand, TireMade } from '@prisma/client';
 import { CreateItemFileDto } from 'src/item-file/dto/create-item-file.dto';
 import { UpdateItemFileDto } from 'src/item-file/dto/update-item-file.dto';
 import { TireItemFile } from 'src/item-file/entities/item-file.entity';
@@ -77,8 +77,6 @@ describe('Vendor (e2e)', () => {
       });
   });
 
-  // TODO: add test to post same data twice
-
   it('should create item-file with provided data (POST)', async () => {
     const tireItemFileTwo: CreateItemFileDto = {
       ...createTireItemFileMock,
@@ -101,6 +99,17 @@ describe('Vendor (e2e)', () => {
     return expect(dbTireItemFileTwo).toEqual(
       expect.objectContaining(tireItemFileTwo)
     );
+  });
+
+  it('should return 409 when duplicate item-file data is provided (POST)', async () => {
+    return request(app.getHttpServer())
+      .post(`${basePath}/`)
+      .send(defaultTireItemFile)
+      .expect(409)
+      .expect(({ body }) => {
+        expect(body).toHaveProperty('error');
+        expect(body).toHaveProperty('message');
+      });
   });
 
   it('should update item-file against an id with provided data (PATCH)', async () => {

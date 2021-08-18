@@ -1,4 +1,6 @@
+import { ConflictException } from '@nestjs/common';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateItemFileDto } from './dto/create-item-file.dto';
 import { UpdateItemFileDto } from './dto/update-item-file.dto';
@@ -8,7 +10,17 @@ export class ItemFileRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   create(createItemFileDto: CreateItemFileDto) {
-    return this.prisma.tireItemFile.create({ data: createItemFileDto });
+    return this.prisma.tireItemFile
+      .create({ data: createItemFileDto })
+      .catch((e) => {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+          if (e.code === 'P2002') {
+            throw new ConflictException('TireItemFile already exists');
+          }
+        }
+
+        throw e;
+      });
   }
 
   findAll() {
