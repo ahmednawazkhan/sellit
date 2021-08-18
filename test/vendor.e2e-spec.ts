@@ -1,6 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { VendorType } from '@prisma/client';
+import { CreateVendorDto } from 'src/vendor/dto/create-vendor.dto';
+import { UpdateVendorDto } from 'src/vendor/dto/update-vendor.dto';
 import { Vendor } from 'src/vendor/entities/vendor.entity';
 import { VendorService } from 'src/vendor/vendor.service';
 import request from 'supertest';
@@ -74,7 +76,7 @@ describe('Vendor (e2e)', () => {
   });
 
   it('should create vendor with provided data (POST)', async () => {
-    const vendorTwo = {
+    const vendorTwo: CreateVendorDto = {
       ...createVendorMock,
       name: 'Vendor Two',
     };
@@ -93,7 +95,7 @@ describe('Vendor (e2e)', () => {
   });
 
   it('should update vendor against an id with provided data (PATCH)', async () => {
-    const vendorTwo = {
+    const vendorTwo: UpdateVendorDto = {
       name: 'Vendor Two',
       description: 'Some description Again',
       type: VendorType.IMPORT,
@@ -106,6 +108,7 @@ describe('Vendor (e2e)', () => {
         expect(body).toEqual(expect.objectContaining(vendorTwo));
         expect(body).toHaveProperty('createdAt');
         expect(body).toHaveProperty('updatedAt');
+        expect(new Date(body.updatedAt) > defaultVendor.updatedAt).toBe(true);
       });
 
     const dbDefaultVendor = await vendorService.findOne(defaultVendor.id);
