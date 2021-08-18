@@ -13,6 +13,8 @@ describe('Vendor (e2e)', () => {
   // TODO: see if route can come from Reflection
   let basePath = '/vendor';
   let defaultVendor: Vendor;
+  let defaultVendorClone;
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -26,6 +28,11 @@ describe('Vendor (e2e)', () => {
 
   beforeEach(async () => {
     defaultVendor = await vendorService.create(createVendorMock);
+    defaultVendorClone = {
+      ...defaultVendor,
+      createdAt: defaultVendor.createdAt.toISOString(),
+      updatedAt: defaultVendor.updatedAt.toISOString(),
+    };
   });
 
   afterEach(async () => {
@@ -41,10 +48,8 @@ describe('Vendor (e2e)', () => {
       .get(basePath)
       .expect(200)
       .expect(({ body }) => {
-        expect(body[0]).toHaveProperty('createdAt');
-        expect(body[0]).toHaveProperty('updatedAt');
-        expect(body).toEqual(
-          expect.arrayContaining([expect.objectContaining(createVendorMock)])
+        expect(body).toStrictEqual(
+          expect.arrayContaining([defaultVendorClone])
         );
       });
   });
@@ -54,9 +59,7 @@ describe('Vendor (e2e)', () => {
       .get(`${basePath}/${defaultVendor.id}`)
       .expect(200)
       .expect(({ body }) => {
-        expect(body).toHaveProperty('createdAt');
-        expect(body).toHaveProperty('updatedAt');
-        expect(body).toEqual(expect.objectContaining(createVendorMock));
+        expect(body).toStrictEqual(defaultVendorClone);
       });
   });
 
@@ -111,11 +114,6 @@ describe('Vendor (e2e)', () => {
   });
 
   it('should delete vendor against an id (DELETE)', async () => {
-    const defaultVendorClone = {
-      ...defaultVendor,
-      createdAt: defaultVendor.createdAt.toISOString(),
-      updatedAt: defaultVendor.updatedAt.toISOString(),
-    };
     await request(app.getHttpServer())
       .delete(`${basePath}/${defaultVendor.id}`)
       .expect(200)
