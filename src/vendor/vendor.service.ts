@@ -26,4 +26,8 @@ export class VendorService {
   remove(id: string) {
     return this.vendorRepository.remove(id);
   }
+
+  removeAll() {
+    return this.vendorRepository.removeAll();
+  }
 }

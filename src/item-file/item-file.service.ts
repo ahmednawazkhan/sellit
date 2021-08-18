@@ -26,4 +26,8 @@ export class ItemFileService {
   remove(id: string) {
     return this.itemFileRepository.remove(id);
   }
+
+  removeAll() {
+    return this.itemFileRepository.removeAll();
+  }
 }

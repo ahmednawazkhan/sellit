@@ -31,10 +31,16 @@ export class ItemFileRepository {
   }
 
   remove(id: string) {
-    return this.prisma.tireItemFile.delete({
-      where: {
-        id,
-      },
-    }).catch(_ => {});
+    return this.prisma.tireItemFile
+      .delete({
+        where: {
+          id,
+        },
+      })
+      .catch((_) => {});
+  }
+
+  removeAll() {
+    return this.prisma.tireItemFile.deleteMany();
   }
 }

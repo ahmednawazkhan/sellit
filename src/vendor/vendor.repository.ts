@@ -31,10 +31,16 @@ export class VendorRepository {
   }
 
   remove(id: string) {
-    return this.prisma.vendor.delete({
-      where: {
-        id,
-      },
-    }).catch(_ => {});
+    return this.prisma.vendor
+      .delete({
+        where: {
+          id,
+        },
+      })
+      .catch((_) => {});
+  }
+
+  removeAll() {
+    return this.prisma.vendor.deleteMany();
   }
 }
