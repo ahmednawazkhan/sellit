@@ -1,9 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ItemFileService } from './item-file.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CreateItemFileDto } from './dto/create-item-file.dto';
 import { UpdateItemFileDto } from './dto/update-item-file.dto';
-import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { TireItemFile } from './entities/item-file.entity';
+import { ItemFileService } from './item-file.service';
 
 @ApiTags('Tire Item File')
 @Controller('item-file')
@@ -12,7 +20,7 @@ export class ItemFileController {
 
   @ApiOkResponse({
     type: TireItemFile,
-    description: 'get item-file by given id'
+    description: 'get item-file by given id',
   })
   @Post()
   create(@Body() createItemFileDto: CreateItemFileDto) {
@@ -22,7 +30,7 @@ export class ItemFileController {
   @ApiOkResponse({
     isArray: true,
     type: TireItemFile,
-    description: "get all tire item files"
+    description: 'get all tire item files',
   })
   @Get()
   findAll() {
@@ -31,7 +39,7 @@ export class ItemFileController {
 
   @ApiOkResponse({
     type: TireItemFile,
-    description: 'get item-file by given id'
+    description: 'get item-file by given id',
   })
   @Get(':id')
   findOne(@Param('id') id: string) {
@@ -40,16 +48,19 @@ export class ItemFileController {
 
   @ApiOkResponse({
     type: TireItemFile,
-    description: 'updated tire item file with given id'
+    description: 'updated tire item file with given id',
   })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateItemFileDto: UpdateItemFileDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateItemFileDto: UpdateItemFileDto
+  ) {
     return this.itemFileService.update(id, updateItemFileDto);
   }
 
   @ApiOkResponse({
     type: TireItemFile,
-    description: 'delete tire item file with given id'
+    description: 'delete tire item file with given id',
   })
   @Delete(':id')
   remove(@Param('id') id: string) {
