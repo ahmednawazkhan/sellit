@@ -1,4 +1,4 @@
-import { INestApplication, NotFoundException } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { VendorType } from '@prisma/client';
 import { Vendor } from 'src/vendor/entities/vendor.entity';
@@ -40,32 +40,24 @@ describe('Vendor (e2e)', () => {
     return request(app.getHttpServer())
       .get(basePath)
       .expect(200)
-      .expect((res) => {
-        expect(res.body[0]).toHaveProperty('createdAt');
-      })
-      .expect((res) => {
-        expect(res.body[0]).toHaveProperty('updatedAt');
-      })
-      .expect((res) =>
-        expect(res.body).toEqual(
+      .expect(({ body }) => {
+        expect(body[0]).toHaveProperty('createdAt');
+        expect(body[0]).toHaveProperty('updatedAt');
+        expect(body).toEqual(
           expect.arrayContaining([expect.objectContaining(createVendorMock)])
-        )
-      );
+        );
+      });
   });
 
   it('should return vendor with provided id (GET)', () => {
     return request(app.getHttpServer())
       .get(`${basePath}/${defaultVendor.id}`)
       .expect(200)
-      .expect((res) => {
-        expect(res.body).toHaveProperty('createdAt');
-      })
-      .expect((res) => {
-        expect(res.body).toHaveProperty('updatedAt');
-      })
-      .expect((res) =>
-        expect(res.body).toEqual(expect.objectContaining(createVendorMock))
-      );
+      .expect(({ body }) => {
+        expect(body).toHaveProperty('createdAt');
+        expect(body).toHaveProperty('updatedAt');
+        expect(body).toEqual(expect.objectContaining(createVendorMock));
+      });
   });
 
   it('should return 404 if provided id is incorrect (GET)', () => {
@@ -74,8 +66,6 @@ describe('Vendor (e2e)', () => {
       .expect(404)
       .expect(({ body }) => {
         expect(body).toHaveProperty('message');
-      })
-      .expect(({ body }) => {
         expect(body).toHaveProperty('error');
       });
   });
@@ -89,15 +79,12 @@ describe('Vendor (e2e)', () => {
       .post(`${basePath}/`)
       .send(vendorTwo)
       .expect(201)
-      .expect((res) => {
-        expect(res.body).toEqual(expect.objectContaining(vendorTwo));
-      })
-      .expect((res) => {
-        expect(res.body).toHaveProperty('createdAt');
-      })
-      .expect((res) => {
-        expect(res.body).toHaveProperty('updatedAt');
+      .expect(({ body }) => {
+        expect(body).toEqual(expect.objectContaining(vendorTwo));
+        expect(body).toHaveProperty('createdAt');
+        expect(body).toHaveProperty('updatedAt');
       });
+
     const dbVendorTwo = await vendorService.findOne(vendorTwoResponse.id);
     return expect(dbVendorTwo).toEqual(expect.objectContaining(vendorTwo));
   });
@@ -112,15 +99,12 @@ describe('Vendor (e2e)', () => {
       .patch(`${basePath}/${defaultVendor.id}`)
       .send(vendorTwo)
       .expect(200)
-      .expect((res) => {
-        expect(res.body).toEqual(expect.objectContaining(vendorTwo));
-      })
-      .expect((res) => {
-        expect(res.body).toHaveProperty('createdAt');
-      })
-      .expect((res) => {
-        expect(res.body).toHaveProperty('updatedAt');
+      .expect(({ body }) => {
+        expect(body).toEqual(expect.objectContaining(vendorTwo));
+        expect(body).toHaveProperty('createdAt');
+        expect(body).toHaveProperty('updatedAt');
       });
+
     const dbDefaultVendor = await vendorService.findOne(defaultVendor.id);
 
     return expect(dbDefaultVendor).toEqual(expect.objectContaining(vendorTwo));
@@ -135,8 +119,8 @@ describe('Vendor (e2e)', () => {
     await request(app.getHttpServer())
       .delete(`${basePath}/${defaultVendor.id}`)
       .expect(200)
-      .expect((res) => {
-        expect(res.body).toStrictEqual(defaultVendorClone);
+      .expect(({ body }) => {
+        expect(body).toStrictEqual(defaultVendorClone);
       });
 
     return expect(vendorService.findOne(defaultVendor.id)).rejects.toThrow(
@@ -148,8 +132,8 @@ describe('Vendor (e2e)', () => {
     return request(app.getHttpServer())
       .delete(`${basePath}/abc`)
       .expect(200)
-      .expect((res) => {
-        expect(res.body).toEqual({});
+      .expect(({ body }) => {
+        expect(body).toEqual({});
       });
   });
 });
