@@ -5,7 +5,7 @@ import { Chance } from 'chance';
 import { INestApplication } from '@nestjs/common';
 const chance = new Chance();
 
-describe('AppController (e2e)', () => {
+describe('Vendor (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -15,6 +15,8 @@ describe('AppController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     await app.init();
+
+    console.log(process.env);
   });
 
   it('/ (GET)', () => {
