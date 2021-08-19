@@ -75,3 +75,26 @@ enum TireMade {
   JAPAN
   INDONESIA
 }
+
+model Vendor{
+  id        String      @id @default(cuid())
+  type      VendorType
+  name      String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+enum VendorType{
+  LOCAL
+  SELF_IMPORTED
+}
+
+model PurchaseBill{
+  id        String      @id @default(cuid())
+  totalCost   Int
+  advance     Int
+  paidAmount  Int
+  remaining   Int
+  quantity    Int
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
