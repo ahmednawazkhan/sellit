@@ -5,6 +5,7 @@ import { ItemFileModule } from './item-file/item-file.module';
 import config from './configs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { VendorModule } from './vendor/vendor.module';
+import { PurchaseBillModule } from './purchase-bill/purchase-bill.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { VendorModule } from './vendor/vendor.module';
     ItemFileModule,
     VendorModule,
     PrismaModule,
+    PurchaseBillModule,
   ],
   providers: [DateScalar],
 })
