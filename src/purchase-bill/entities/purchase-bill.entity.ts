@@ -16,6 +16,9 @@ export class PurchaseBill {
   @ApiProperty()
   costPaid: number;
 
+  @ApiProperty()
+  vendor_id: string;
+
   createdAt: Date;
   updatedAt: Date;
 }

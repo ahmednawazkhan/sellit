@@ -19,7 +19,7 @@ export class CreatePurchaseBillDto {
   costPaid: number;
 
   @ApiProperty()
-  id: string;
+  vendor_id: string;
 
 }
 

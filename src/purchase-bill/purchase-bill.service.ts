@@ -7,8 +7,8 @@ import { PurchaseBillRepository } from './purchase-bill.repository';
 export class PurchaseBillService {
   constructor(private readonly purchaseBillRepository: PurchaseBillRepository) { }
 
-  create(createPurchaseBillDto: CreatePurchaseBillDto, id: string) {
-    return this.purchaseBillRepository.create(createPurchaseBillDto, id);
+  create(createPurchaseBillDto: CreatePurchaseBillDto, vendor_id: string) {
+    return this.purchaseBillRepository.create(createPurchaseBillDto, vendor_id);
   }
 
   findAll() {

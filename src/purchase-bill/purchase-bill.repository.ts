@@ -8,17 +8,14 @@ import { UpdatePurchaseBillDto } from './dto/update-purchase-bill.dto';
 export class PurchaseBillRepository {
   constructor(private readonly prisma: PrismaService) { }
 
-  create(createpurchaseBillDto: CreatePurchaseBillDto, id: string) {
+  create(createpurchaseBillDto: CreatePurchaseBillDto, vendor_id: string) {
     return this.prisma.purchaseBill.create({
       data: {
         ...createpurchaseBillDto,
-        vendor: {
-          connect: {
-            id
-          }
-        }
+        vendor_id: vendor_id
       }
-    });
+    }
+    );
   }
 
   findAll() {
