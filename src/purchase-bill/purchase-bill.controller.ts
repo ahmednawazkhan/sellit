@@ -16,8 +16,7 @@ export class PurchaseBillController {
   })
   @Post()
   create(@Body() createPurchaseBillDto: CreatePurchaseBillDto) {
-    const vendor_id = createPurchaseBillDto.vendor_id;
-    return this.purchaseBillService.create(createPurchaseBillDto, vendor_id);
+    return this.purchaseBillService.create(createPurchaseBillDto);
   }
 
   @ApiOkResponse({
