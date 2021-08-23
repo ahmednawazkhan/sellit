@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class PurchaseBill {
   @ApiProperty({ example: 'cksap55v40000mssb41hik5dz' })
@@ -7,8 +7,8 @@ export class PurchaseBill {
   @ApiProperty()
   totalCost: number;
 
-  @ApiProperty()
-  advancePaid: number;
+  @ApiProperty({ nullable: true })
+  advancePaid?: number;
 
   @ApiProperty()
   tireQuantity: number;

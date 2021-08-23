@@ -7,7 +7,6 @@ export class CreatePurchaseBillDto {
   totalCost: number;
 
   @ApiProperty()
-  @IsNotEmpty()
   advancePaid: number;
 
   @ApiProperty()

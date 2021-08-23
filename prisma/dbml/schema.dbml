@@ -43,7 +43,7 @@ Table TireItemFile {
 Table PurchaseBill {
   id String [pk]
   totalCost Int [not null]
-  advancePaid Int [not null]
+  advancePaid Int
   tireQuantity Int [not null]
   costPaid Int [not null]
   vendor Vendor [not null]
