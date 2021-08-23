@@ -1,4 +1,4 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePurchaseBillDto } from './dto/create-purchase-bill.dto';
 import { UpdatePurchaseBillDto } from './dto/update-purchase-bill.dto';
@@ -13,7 +13,7 @@ export class PurchaseBillRepository {
       data: createpurchaseBillDto
     }
     ).catch((e) => {
-      throw new HttpException(e.message, 400);
+      throw new BadRequestException(e.message);
     });
   }
 
