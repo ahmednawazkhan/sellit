@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   Patch,
-  Post,
+  Post
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CreateVendorDto } from './dto/create-vendor.dto';
@@ -16,11 +16,11 @@ import { VendorService } from './vendor.service';
 @ApiTags('Vendor')
 @Controller('vendor')
 export class VendorController {
-  constructor(private readonly vendorService: VendorService) {}
+  constructor(private readonly vendorService: VendorService) { }
 
   @ApiOkResponse({
     type: Vendor,
-    description: 'get vendor by given id',
+    description: 'create a vendor',
   })
   @Post()
   create(@Body() createVendorDto: CreateVendorDto) {

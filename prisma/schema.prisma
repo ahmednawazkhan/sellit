@@ -56,7 +56,7 @@ model TireItemFile {
 model PurchaseBill {
   id           String   @id @default(cuid())
   totalCost    Int
-  advancePaid  Int
+  advancePaid  Int?
   tireQuantity Int
   costPaid     Int
   vendor       Vendor   @relation(fields: [vendor_id], references: [id])
