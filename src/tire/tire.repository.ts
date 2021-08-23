@@ -1,16 +1,16 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePurchaseBillDto } from './dto/create-purchase-bill.dto';
-import { UpdatePurchaseBillDto } from './dto/update-purchase-bill.dto';
+import { CreateTireDto } from './dto/create-tire.dto';
+import { UpdateTireDto } from './dto/update-tire.dto';
 
 
 @Injectable()
-export class PurchaseBillRepository {
+export class TireRepository {
   constructor(private readonly prisma: PrismaService) { }
 
-  create(createPurchaseBillDto: CreatePurchaseBillDto) {
-    return this.prisma.purchaseBill.create({
-      data: createPurchaseBillDto
+  create(createTireDto: CreateTireDto) {
+    return this.prisma.tire.create({
+      data: createTireDto
     }
     ).catch((e) => {
       throw new BadRequestException(e.message);
@@ -18,11 +18,11 @@ export class PurchaseBillRepository {
   }
 
   findAll() {
-    return this.prisma.purchaseBill.findMany();
+    return this.prisma.tire.findMany();
   }
 
   findOne(id: string) {
-    return this.prisma.purchaseBill
+    return this.prisma.tire
       .findUnique({
         where: { id },
         rejectOnNotFound: true,
@@ -32,19 +32,19 @@ export class PurchaseBillRepository {
       });
   }
 
-  update(id: string, updatePurchaseBillDto: UpdatePurchaseBillDto) {
-    return this.prisma.purchaseBill.update({
+  update(id: string, updateTireDto: UpdateTireDto) {
+    return this.prisma.tire.update({
       where: {
         id,
       },
       data: {
-        ...updatePurchaseBillDto,
+        ...updateTireDto,
       },
     });
   }
 
   remove(id: string) {
-    return this.prisma.purchaseBill
+    return this.prisma.tire
       .delete({
         where: {
           id,
@@ -54,6 +54,6 @@ export class PurchaseBillRepository {
   }
 
   removeAll() {
-    return this.prisma.purchaseBill.deleteMany();
+    return this.prisma.tire.deleteMany();
   }
 }
