@@ -8,9 +8,9 @@ import { UpdatePurchaseBillDto } from './dto/update-purchase-bill.dto';
 export class PurchaseBillRepository {
   constructor(private readonly prisma: PrismaService) { }
 
-  create(createpurchaseBillDto: CreatePurchaseBillDto) {
+  create(createPurchaseBillDto: CreatePurchaseBillDto) {
     return this.prisma.purchaseBill.create({
-      data: createpurchaseBillDto
+      data: createPurchaseBillDto
     }
     ).catch((e) => {
       throw new BadRequestException(e.message);
