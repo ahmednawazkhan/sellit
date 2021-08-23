@@ -9,14 +9,15 @@ export class PurchaseBillRepository {
   constructor(private readonly prisma: PrismaService) { }
 
   create(createpurchaseBillDto: CreatePurchaseBillDto) {
-    const vendor_id = createpurchaseBillDto.vendor_id;
     return this.prisma.purchaseBill.create({
       data: {
         ...createpurchaseBillDto,
-        vendor_id: vendor_id
+        vendor_id: createpurchaseBillDto.vendor_id
       }
     }
-    );
+    ).catch((e) => {
+      throw new NotFoundException(e.message);
+    });
   }
 
   findAll() {
