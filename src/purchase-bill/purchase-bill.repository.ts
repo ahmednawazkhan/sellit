@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePurchaseBillDto } from './dto/create-purchase-bill.dto';
 import { UpdatePurchaseBillDto } from './dto/update-purchase-bill.dto';
@@ -10,13 +10,10 @@ export class PurchaseBillRepository {
 
   create(createpurchaseBillDto: CreatePurchaseBillDto) {
     return this.prisma.purchaseBill.create({
-      data: {
-        ...createpurchaseBillDto,
-        vendor_id: createpurchaseBillDto.vendor_id
-      }
+      data: createpurchaseBillDto
     }
     ).catch((e) => {
-      throw new NotFoundException(e.message);
+      throw new HttpException(e.message, 400);
     });
   }
 
