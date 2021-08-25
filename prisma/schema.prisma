@@ -41,28 +41,29 @@ enum Role {
 }
 
 model TireItemFile {
-  id        String      @id @default(cuid())
+  id        String          @id @default(cuid())
   brand     TireBrand
   size      TireSize
   pattern   TirePattern
   made      TireMade
-  tires     Tire[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  tires     TireInventory[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
 
   @@unique([brand, size, pattern, made], name: "brand_size_pattern_made")
 }
 
 model PurchaseBill {
-  id           String   @id @default(cuid())
-  totalCost    Int
-  advancePaid  Int?
-  tireQuantity Int
-  costPaid     Int
-  vendor       Vendor   @relation(fields: [vendor_id], references: [id])
-  vendor_id    String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                 String          @id @default(cuid())
+  totalCost          Int
+  advancePaid        Int?
+  tireQuantity       Int
+  costPaid           Int
+  vendor             Vendor          @relation(fields: [vendor_id], references: [id])
+  vendor_id          String
+  tireInventoryItems TireInventory[]
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 }
 
 model Vendor {
@@ -75,16 +76,19 @@ model Vendor {
   updatedAt     DateTime       @updatedAt
 }
 
-model Tire {
-  id                String       @id @default(cuid())
-  itemFile          TireItemFile @relation(fields: [itemFileId], references: [id])
-  itemFileId        String
-  dateOfManufacture DateTime
-  quantity          Int
-  sellingPrice      Int
-  purchasePrice     Int
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
+model TireInventory {
+  id                  String       @id @default(cuid())
+  itemFile            TireItemFile @relation(fields: [itemFileId], references: [id])
+  itemFileId          String
+  dateOfManufacture   DateTime
+  quantity            Int
+  sellingPrice        Int
+  averageSellingPrice Int
+  purchasePrice       Int
+  purchaseBill        PurchaseBill @relation(fields: [purchaseId], references: [id])
+  purchaseId          String
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
 
   @@unique([itemFileId, dateOfManufacture], name: "itemFile_dateOfManufacture")
 }

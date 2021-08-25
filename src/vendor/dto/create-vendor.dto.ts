@@ -1,11 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { VendorType } from '@prisma/client';
-import { IsEnum, IsNotEmpty } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateVendorDto {
 
   @ApiProperty()
   @IsNotEmpty()
+  @IsString()
   name: string;
 
   @ApiProperty()
@@ -13,7 +14,7 @@ export class CreateVendorDto {
 
   @IsNotEmpty()
   @IsEnum(VendorType)
-  @ApiProperty({enum: VendorType})
+  @ApiProperty({ enum: VendorType })
   type: VendorType;
 
 }

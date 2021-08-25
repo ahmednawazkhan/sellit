@@ -60,7 +60,7 @@ CREATE TABLE "TireItemFile" (
 CREATE TABLE "PurchaseBill" (
     "id" TEXT NOT NULL,
     "totalCost" INTEGER NOT NULL,
-    "advancePaid" INTEGER NOT NULL,
+    "advancePaid" INTEGER,
     "tireQuantity" INTEGER NOT NULL,
     "costPaid" INTEGER NOT NULL,
     "vendor_id" TEXT NOT NULL,
@@ -83,13 +83,15 @@ CREATE TABLE "Vendor" (
 );
 
 -- CreateTable
-CREATE TABLE "Tire" (
+CREATE TABLE "TireInventoryEntity" (
     "id" TEXT NOT NULL,
     "itemFileId" TEXT NOT NULL,
     "dateOfManufacture" TIMESTAMP(3) NOT NULL,
     "quantity" INTEGER NOT NULL,
     "sellingPrice" INTEGER NOT NULL,
     "purchasePrice" INTEGER NOT NULL,
+    "averageSellingPrice" INTEGER NOT NULL,
+    "purchaseId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -103,7 +105,7 @@ CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
 CREATE UNIQUE INDEX "brand_size_pattern_made" ON "TireItemFile"("brand", "size", "pattern", "made");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "itemFile_dateOfManufacture" ON "Tire"("itemFileId", "dateOfManufacture");
+CREATE UNIQUE INDEX "itemFile_dateOfManufacture" ON "TireInventoryEntity"("itemFileId", "dateOfManufacture");
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -112,4 +114,7 @@ ALTER TABLE "Post" ADD FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELET
 ALTER TABLE "PurchaseBill" ADD FOREIGN KEY ("vendor_id") REFERENCES "Vendor"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Tire" ADD FOREIGN KEY ("itemFileId") REFERENCES "TireItemFile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "TireInventoryEntity" ADD FOREIGN KEY ("itemFileId") REFERENCES "TireItemFile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "TireInventoryEntity" ADD FOREIGN KEY ("purchaseId") REFERENCES "PurchaseBill"("id") ON DELETE CASCADE ON UPDATE CASCADE;

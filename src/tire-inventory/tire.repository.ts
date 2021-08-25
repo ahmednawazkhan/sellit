@@ -1,16 +1,16 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreatePurchaseBillDto } from './dto/create-purchase-bill.dto';
-import { UpdatePurchaseBillDto } from './dto/update-purchase-bill.dto';
+import { CreateTireInventoryDto } from './dto/create-tire.dto';
+import { UpdateTireInventoryDto } from './dto/update-tire.dto';
 
 
 @Injectable()
-export class PurchaseBillRepository {
+export class TireInventoryRepository {
   constructor(private readonly prisma: PrismaService) { }
 
-  create(createPurchaseBillDto: CreatePurchaseBillDto) {
-    return this.prisma.purchaseBill.create({
-      data: createPurchaseBillDto
+  create(createTireInventoryDto: CreateTireInventoryDto) {
+    return this.prisma.tireInventoryEntity.create({
+      data: createTireInventoryDto
     }
     ).catch((e) => {
       throw new BadRequestException(e.message);
@@ -18,11 +18,11 @@ export class PurchaseBillRepository {
   }
 
   findAll() {
-    return this.prisma.purchaseBill.findMany();
+    return this.prisma.tireInventoryEntity.findMany();
   }
 
   findOne(id: string) {
-    return this.prisma.purchaseBill
+    return this.prisma.tireInventoryEntity
       .findUnique({
         where: { id },
         rejectOnNotFound: true,
@@ -32,13 +32,13 @@ export class PurchaseBillRepository {
       });
   }
 
-  update(id: string, updatePurchaseBillDto: UpdatePurchaseBillDto) {
-    return this.prisma.purchaseBill.update({
+  update(id: string, updateTireInventoryDto: UpdateTireInventoryDto) {
+    return this.prisma.tireInventoryEntity.update({
       where: {
         id,
       },
       data: {
-        ...updatePurchaseBillDto,
+        ...updateTireInventoryDto,
       },
     }).catch((e) => {
       throw new BadRequestException(e.message);
@@ -46,7 +46,7 @@ export class PurchaseBillRepository {
   }
 
   remove(id: string) {
-    return this.prisma.purchaseBill
+    return this.prisma.tireInventoryEntity
       .delete({
         where: {
           id,
@@ -56,6 +56,6 @@ export class PurchaseBillRepository {
   }
 
   removeAll() {
-    return this.prisma.purchaseBill.deleteMany();
+    return this.prisma.tireInventoryEntity.deleteMany();
   }
 }

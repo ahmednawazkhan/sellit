@@ -1,5 +1,4 @@
-import { ConflictException } from '@nestjs/common';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateItemFileDto } from './dto/create-item-file.dto';
@@ -7,7 +6,7 @@ import { UpdateItemFileDto } from './dto/update-item-file.dto';
 
 @Injectable()
 export class ItemFileRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   create(createItemFileDto: CreateItemFileDto) {
     return this.prisma.tireItemFile
@@ -43,7 +42,9 @@ export class ItemFileRepository {
       data: {
         ...updateItemFileDto,
       },
-    });
+    }).catch((e) => {
+      throw new BadRequestException(e.message);
+    });;
   }
 
   remove(id: string) {
@@ -53,7 +54,7 @@ export class ItemFileRepository {
           id,
         },
       })
-      .catch((_) => {});
+      .catch((_) => { });
   }
 
   removeAll() {
