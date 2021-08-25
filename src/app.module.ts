@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { DateScalar } from './common/scalars/date.scalar';
 import { ConfigModule } from '@nestjs/config';
-import { ItemFileModule } from './item-file/item-file.module';
+import { DateScalar } from './common/scalars/date.scalar';
 import config from './configs/config';
+import { ItemFileModule } from './item-file/item-file.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { VendorModule } from './vendor/vendor.module';
 import { PurchaseBillModule } from './purchase-bill/purchase-bill.module';
-import { TireModule } from './tire/tire.module';
+import { TireInventoryModule } from './tire-inventory/tire.module';
+import { VendorModule } from './vendor/vendor.module';
 
 @Module({
   imports: [
@@ -15,8 +15,8 @@ import { TireModule } from './tire/tire.module';
     VendorModule,
     PrismaModule,
     PurchaseBillModule,
-    TireModule,
+    TireInventoryModule,
   ],
   providers: [DateScalar],
 })
-export class AppModule {}
+export class AppModule { }
