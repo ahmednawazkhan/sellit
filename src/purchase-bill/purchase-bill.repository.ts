@@ -40,6 +40,8 @@ export class PurchaseBillRepository {
       data: {
         ...updatePurchaseBillDto,
       },
+    }).catch((e) => {
+      throw new BadRequestException(e.message);
     });
   }
 

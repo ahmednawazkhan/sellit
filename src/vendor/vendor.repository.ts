@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateVendorDto } from './dto/create-vendor.dto';
 import { UpdateVendorDto } from './dto/update-vendor.dto';
 
 @Injectable()
 export class VendorRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   create(createVendorDto: CreateVendorDto) {
     return this.prisma.vendor.create({ data: createVendorDto });
@@ -34,6 +34,8 @@ export class VendorRepository {
       data: {
         ...updateVendorDto,
       },
+    }).catch((e) => {
+      throw new BadRequestException(e.message);
     });
   }
 
@@ -44,7 +46,7 @@ export class VendorRepository {
           id,
         },
       })
-      .catch((_) => {});
+      .catch((_) => { });
   }
 
   removeAll() {

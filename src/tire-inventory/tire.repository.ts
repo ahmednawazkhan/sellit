@@ -40,6 +40,8 @@ export class TireInventoryRepository {
       data: {
         ...updateTireInventoryDto,
       },
+    }).catch((e) => {
+      throw new BadRequestException(e.message);
     });
   }
 
