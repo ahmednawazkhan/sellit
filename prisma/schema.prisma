@@ -54,16 +54,16 @@ model TireItemFile {
 }
 
 model PurchaseBill {
-  id           String          @id @default(cuid())
-  totalCost    Int
-  advancePaid  Int?
-  tireQuantity Int
-  costPaid     Int
-  vendor       Vendor          @relation(fields: [vendor_id], references: [id])
-  vendor_id    String
-  tires        TireInventory[]
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  id                 String          @id @default(cuid())
+  totalCost          Int
+  advancePaid        Int?
+  tireQuantity       Int
+  costPaid           Int
+  vendor             Vendor          @relation(fields: [vendor_id], references: [id])
+  vendor_id          String
+  tireInventoryItems TireInventory[]
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
 }
 
 model Vendor {
