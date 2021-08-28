@@ -13,7 +13,7 @@ import { UpdateTireInventoryDto } from './dto/update-tire-inventory.dto';
 import { TireInventory } from './entities/tire-inventory.entity';
 import { TireInventoryService } from './tire-inventory.service';
 
-@ApiTags('Tire Inventory Entity')
+@ApiTags('Tire Inventory')
 @Controller('tire-inventory')
 export class TireInventoryController {
   constructor(private readonly tireInventoryService: TireInventoryService) {}
