@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTireInventoryDto } from './dto/create-tire.dto';
-import { UpdateTireInventoryDto } from './dto/update-tire.dto';
-import { TireInventoryRepository } from './tire.repository';
+import { CreateTireInventoryDto } from './dto/create-tire-inventory.dto';
+import { UpdateTireInventoryDto } from './dto/update-tire-inventory.dto';
+import { TireInventoryRepository } from './tire-inventory.repository';
 
 @Injectable()
 export class TireInventoryService {
-  constructor(private readonly tireInventoryRepository: TireInventoryRepository) { }
+  constructor(
+    private readonly tireInventoryRepository: TireInventoryRepository
+  ) {}
   create(createTireInventoryDto: CreateTireInventoryDto) {
     return this.tireInventoryRepository.create(createTireInventoryDto);
   }

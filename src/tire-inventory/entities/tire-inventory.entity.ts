@@ -1,7 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
-export class TireInventoryEntity {
-
+export class TireInventory {
   @ApiProperty({ example: 'cksap55v40000mssb41hik5dz' })
   id: string;
 
@@ -28,6 +27,4 @@ export class TireInventoryEntity {
 
   createdAt: Date;
   updatedAt: Date;
-
-
 }

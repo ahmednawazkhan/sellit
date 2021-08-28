@@ -5,7 +5,7 @@ import config from './configs/config';
 import { ItemFileModule } from './item-file/item-file.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { PurchaseBillModule } from './purchase-bill/purchase-bill.module';
-import { TireInventoryModule } from './tire-inventory/tire.module';
+import { TireInventoryModule } from './tire-inventory/tire-inventory.module';
 import { VendorModule } from './vendor/vendor.module';
 
 @Module({
@@ -19,4 +19,4 @@ import { VendorModule } from './vendor/vendor.module';
   ],
   providers: [DateScalar],
 })
-export class AppModule { }
+export class AppModule {}

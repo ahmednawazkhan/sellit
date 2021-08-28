@@ -1,17 +1,25 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { CreateTireInventoryDto } from './dto/create-tire.dto';
-import { UpdateTireInventoryDto } from './dto/update-tire.dto';
-import { TireInventoryEntity } from './entities/tire.entity';
-import { TireInventoryService } from './tire.service';
+import { CreateTireInventoryDto } from './dto/create-tire-inventory.dto';
+import { UpdateTireInventoryDto } from './dto/update-tire-inventory.dto';
+import { TireInventory } from './entities/tire-inventory.entity';
+import { TireInventoryService } from './tire-inventory.service';
 
 @ApiTags('Tire Inventory Entity')
 @Controller('tire-inventory')
 export class TireInventoryController {
-  constructor(private readonly tireInventoryService: TireInventoryService) { }
+  constructor(private readonly tireInventoryService: TireInventoryService) {}
 
   @ApiOkResponse({
-    type: TireInventoryEntity,
+    type: TireInventory,
     description: 'create a  new tire inventory entity',
   })
   @Post()
@@ -20,7 +28,7 @@ export class TireInventoryController {
   }
 
   @ApiOkResponse({
-    type: TireInventoryEntity,
+    type: TireInventory,
     description: 'get all the tire inventory entities',
   })
   @Get()
@@ -28,7 +36,7 @@ export class TireInventoryController {
     return this.tireInventoryService.findAll();
   }
   @ApiOkResponse({
-    type: TireInventoryEntity,
+    type: TireInventory,
     description: 'get the tire inventory entity by given id',
   })
   @Get(':id')
@@ -37,16 +45,19 @@ export class TireInventoryController {
   }
 
   @ApiOkResponse({
-    type: TireInventoryEntity,
+    type: TireInventory,
     description: 'update the tire inventory entity by given id',
   })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTireInventoryDto: UpdateTireInventoryDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateTireInventoryDto: UpdateTireInventoryDto
+  ) {
     return this.tireInventoryService.update(id, updateTireInventoryDto);
   }
 
   @ApiOkResponse({
-    type: TireInventoryEntity,
+    type: TireInventory,
     description: 'delete the tire inventory entity by given id',
   })
   @Delete(':id')
