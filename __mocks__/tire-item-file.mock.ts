@@ -1,4 +1,4 @@
-import { CreateItemFileDto } from 'src/item-file/dto/create-item-file.dto';
+import { CreateItemFileDto } from 'src/inventory/item-file/dto/create-item-file.dto';
 
 export const createTireItemFileMock: CreateItemFileDto = {
   brand: 'BRIDGESTONE',

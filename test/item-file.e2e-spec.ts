@@ -1,10 +1,10 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TireBrand, TireMade } from '@prisma/client';
-import { CreateItemFileDto } from 'src/item-file/dto/create-item-file.dto';
-import { UpdateItemFileDto } from 'src/item-file/dto/update-item-file.dto';
-import { TireItemFile } from 'src/item-file/entities/item-file.entity';
-import { ItemFileService } from 'src/item-file/item-file.service';
+import { CreateItemFileDto } from 'src/inventory/item-file/dto/create-item-file.dto';
+import { UpdateItemFileDto } from 'src/inventory/item-file/dto/update-item-file.dto';
+import { TireItemFile } from 'src/inventory/item-file/entities/item-file.entity';
+import { ItemFileService } from 'src/inventory/item-file/item-file.service';
 import request from 'supertest';
 import { createTireItemFileMock } from '__mocks__/tire-item-file.mock';
 import { AppModule } from '../src/app.module';

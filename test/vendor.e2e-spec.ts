@@ -1,10 +1,10 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { VendorType } from '@prisma/client';
-import { CreateVendorDto } from 'src/vendor/dto/create-vendor.dto';
-import { UpdateVendorDto } from 'src/vendor/dto/update-vendor.dto';
-import { Vendor } from 'src/vendor/entities/vendor.entity';
-import { VendorService } from 'src/vendor/vendor.service';
+import { CreateVendorDto } from 'src/inventory/vendor/dto/create-vendor.dto';
+import { UpdateVendorDto } from 'src/inventory/vendor/dto/update-vendor.dto';
+import { Vendor } from 'src/inventory/vendor/entities/vendor.entity';
+import { VendorService } from 'src/inventory/vendor/vendor.service';
 import request from 'supertest';
 import { createVendorMock } from '__mocks__/vendor.mock';
 import { AppModule } from '../src/app.module';

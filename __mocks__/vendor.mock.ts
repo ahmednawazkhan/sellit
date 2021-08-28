@@ -1,5 +1,5 @@
 import { Vendor, VendorType } from '@prisma/client';
-import { CreateVendorDto } from 'src/vendor/dto/create-vendor.dto';
+import { CreateVendorDto } from 'src/inventory/vendor/dto/create-vendor.dto';
 
 export const createVendorMock: CreateVendorDto = {
   name: 'Vendor One',
