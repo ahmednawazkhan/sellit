@@ -20,10 +20,10 @@ export class PurchaseBill {
   vendor_id: string;
 
   @ApiProperty()
-  nextPaymentDate: Date;
+  nextPaymentDate?: Date;
 
   @ApiProperty()
-  nextPaymentAmount: number;
+  nextPaymentAmount?: number;
 
   createdAt: Date;
   updatedAt: Date;

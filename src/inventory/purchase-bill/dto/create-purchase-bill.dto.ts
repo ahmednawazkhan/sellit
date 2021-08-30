@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsDateString, IsNotEmpty, IsNumber, IsString } from "class-validator";
 export class CreatePurchaseBillDto {
   @ApiProperty()
   @IsNotEmpty()
@@ -26,13 +26,12 @@ export class CreatePurchaseBillDto {
   vendor_id: string;
 
   @ApiProperty()
-  @IsNotEmpty()
-  nextPaymentDate: Date;
+  @IsDateString({ strict: true })
+  nextPaymentDate?: Date;
 
   @ApiProperty()
-  @IsNotEmpty()
   @IsNumber()
-  nextPaymentAmount: number;
+  nextPaymentAmount?: number;
 
 }
 
