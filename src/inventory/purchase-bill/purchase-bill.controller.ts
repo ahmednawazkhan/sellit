@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePurchaseBillDto } from './dto/create-purchase-bill.dto';
 import { UpdatePurchaseBillDto } from './dto/update-purchase-bill.dto';
@@ -27,6 +27,43 @@ export class PurchaseBillController {
   findAll() {
     return this.purchaseBillService.findAll();
   }
+
+  @ApiOkResponse({
+    type: PurchaseBill,
+    description: 'get three nearest purchase bill payments',
+  })
+  @Get('/payments')
+  getNearestPayments() {
+    return this.purchaseBillService.getNearestPayments();
+  }
+
+  @ApiOkResponse({
+    type: PurchaseBill,
+    description: 'get the total tires till given month (0: all time , 1: 1 month back, 6: six months back)',
+  })
+  @Get('/total-cost')
+  getTotalPurchaseCost(@Query('month') month: number) {
+    return this.purchaseBillService.getTotalCost(month);
+  }
+
+  @ApiOkResponse({
+    type: PurchaseBill,
+    description: 'get the total purchase cost till given month (0: all time , 1: 1 month back, 6: six months back)',
+  })
+  @Get('/total-tires')
+  getTotalTiresBought(@Query('month') month: number) {
+    return this.purchaseBillService.getTotalTires(month);
+  }
+
+  @ApiOkResponse({
+    type: PurchaseBill,
+    description: 'get all the paid purchase bills',
+  })
+  @Get('/all-paid')
+  getAllPaid() {
+    return this.purchaseBillService.getAllPaid();
+  }
+
   @ApiOkResponse({
     type: PurchaseBill,
     description: 'get Purchase bill by given id',
@@ -52,4 +89,27 @@ export class PurchaseBillController {
   remove(@Param('id') id: string) {
     return this.purchaseBillService.remove(id);
   }
+  @ApiOkResponse({
+    type: PurchaseBill,
+    description: 'get all the paid purchase bills',
+  })
+  @ApiOkResponse({
+    type: PurchaseBill,
+    description: 'get Tire Inventory for a given purchase bill id',
+  })
+  @Get('/tire-inventory/:id')
+  getTireInventory(@Param('id') id: string) {
+    return this.purchaseBillService.getTireInventory(id);
+  }
+  @ApiOkResponse({
+    type: PurchaseBill,
+    description: 'get remaining tires given purchase bill id',
+  })
+  @Get('/remaining/:id')
+  getRemainingTires(@Param('id') id: string) {
+    return this.purchaseBillService.getRemainingTires(id);
+  }
+
+
+
 }

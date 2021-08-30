@@ -60,4 +60,17 @@ export class ItemFileRepository {
   removeAll() {
     return this.prisma.tireItemFile.deleteMany();
   }
+  async getTireInventory(id: string) {
+    return (await this.prisma.tireItemFile.findUnique({
+      where: {
+        id
+      },
+      rejectOnNotFound: true,
+      select: {
+        tires: true,
+      },
+    }).catch((e) => {
+      throw new NotFoundException(e.message);
+    })).tires;
+  }
 }

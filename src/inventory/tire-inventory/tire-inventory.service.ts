@@ -6,9 +6,9 @@ import { TireInventoryRepository } from './tire-inventory.repository';
 @Injectable()
 export class TireInventoryService {
   constructor(
-    private readonly tireInventoryRepository: TireInventoryRepository
-  ) {}
-  create(createTireInventoryDto: CreateTireInventoryDto) {
+    private readonly tireInventoryRepository: TireInventoryRepository,
+  ) { }
+  async create(createTireInventoryDto: CreateTireInventoryDto) {
     return this.tireInventoryRepository.create(createTireInventoryDto);
   }
 
@@ -27,4 +27,22 @@ export class TireInventoryService {
   remove(id: string) {
     return this.tireInventoryRepository.remove(id);
   }
+  totalQuantity(purchaseId: string) {
+    return this.tireInventoryRepository.countQuantity(purchaseId);
+  }
+  totalQuantityItemFile(itemFileId: string) {
+    return this.tireInventoryRepository.countQuantityItemFile(itemFileId);
+  }
+  getPurchaseBill(id: string) {
+    return this.tireInventoryRepository.getPurchaseBill(id);
+  }
+  getVendor(id: string) {
+    return this.tireInventoryRepository.getVendor(id);
+  }
+
+  getTotalTires() {
+    return this.tireInventoryRepository.getTotalTires();
+  }
+
+
 }

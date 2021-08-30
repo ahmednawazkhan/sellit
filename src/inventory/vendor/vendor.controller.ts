@@ -2,8 +2,7 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
-  Param,
+  Get, Param,
   Patch,
   Post
 } from '@nestjs/common';
@@ -62,5 +61,13 @@ export class VendorController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.vendorService.remove(id);
+  }
+  @ApiOkResponse({
+    type: Vendor,
+    description: 'get vendor by given id',
+  })
+  @Get('/purchase-bills/:id')
+  getPurchaseBills(@Param('id') id: string) {
+    return this.vendorService.getPurchaseBills(id);
   }
 }

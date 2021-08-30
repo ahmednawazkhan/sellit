@@ -58,4 +58,87 @@ export class PurchaseBillRepository {
   removeAll() {
     return this.prisma.purchaseBill.deleteMany();
   }
+  getAllPaid() {
+    return this.prisma.$queryRaw(
+      'SELECT * FROM "PurchaseBill" WHERE "totalCost" != "costPaid";'
+    );
+  }
+  async getTireInvetory(id: string) {
+    return (await this.prisma.purchaseBill.findUnique({
+      where: {
+        id,
+      },
+      rejectOnNotFound: true,
+      select: {
+        tireInventoryItems: true,
+      },
+    }).catch((e) => {
+      throw new NotFoundException(e.message);
+    })).tireInventoryItems;
+  }
+
+  async getTotalTires(month: number) {
+    let date = new Date();
+    if (month == 0) {
+      return (await this.prisma.purchaseBill.aggregate({
+        _sum: {
+          tireQuantity: true,
+        },
+      }))._sum;
+    }
+    return (await this.prisma.purchaseBill.aggregate({
+      _sum: {
+        tireQuantity: true,
+      },
+      where: {
+        createdAt: {
+          gte: new Date(date.getFullYear(), date.getMonth() - month, date.getDate()),
+          lte: date
+        },
+      },
+    }))._sum;
+
+
+  }
+  async getTotalPurchaseCost(month: number) {
+    let date = new Date();
+    if (month == 0) {
+      return (await this.prisma.purchaseBill.aggregate({
+        _sum: {
+          totalCost: true,
+        },
+      }))._sum;
+    }
+    else {
+      return (await this.prisma.purchaseBill.aggregate({
+        _sum: {
+          totalCost: true,
+        },
+        where: {
+          createdAt: {
+            gte: new Date(date.getFullYear(), date.getMonth() - month, date.getDate()),
+            lte: date
+          },
+        },
+      }))._sum
+    };
+  }
+
+  getNearestPayments() {
+    return this.prisma.purchaseBill.findMany({
+      take: 3,
+      orderBy: [
+        {
+          nextPaymentDate: 'asc'
+        }
+      ],
+      where: {
+        nextPaymentDate: {
+          gte: new Date(),
+        },
+      },
+
+    });
+
+  }
 }

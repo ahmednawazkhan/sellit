@@ -7,7 +7,6 @@ export class CreatePurchaseBillDto {
   totalCost: number;
 
   @ApiProperty()
-  @IsNotEmpty()
   @IsNumber()
   advancePaid: number;
 
@@ -25,6 +24,15 @@ export class CreatePurchaseBillDto {
   @IsNotEmpty()
   @IsString()
   vendor_id: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  nextPaymentDate: Date;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber()
+  nextPaymentAmount: number;
 
 }
 
