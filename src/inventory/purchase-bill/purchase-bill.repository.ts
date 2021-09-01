@@ -125,20 +125,6 @@ export class PurchaseBillRepository {
   }
 
   getNearestPayments() {
-    return this.prisma.purchaseBill.findMany({
-      take: 3,
-      orderBy: [
-        {
-          nextPaymentDate: 'asc'
-        }
-      ],
-      where: {
-        nextPaymentDate: {
-          gte: new Date(),
-        },
-      },
-
-    });
-
+    return this.prisma.$queryRaw('SELECT * FROM blog."PurchaseBill" WHERE "totalCost" > "costPaid" ORDER BY "nextPaymentDate" ASC LIMIT 3;');
   }
 }

@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import * as dotenv from 'dotenv';
+import { tireItemData } from './seed/itemFile';
+import { purchaseBillData } from './seed/purchaseBill';
 
 const prisma = new PrismaClient(
 );
@@ -7,48 +9,86 @@ const prisma = new PrismaClient(
 async function main() {
   dotenv.config();
   console.log('Seeding...');
-
-  const user1 = await prisma.user.create({
+  await prisma.tireInventory.create({
     data: {
-      email: 'lisa@simpson.com',
-      firstname: 'Lisa',
-      lastname: 'Simpson',
-      password: '$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm', // secret42
-      role: 'USER',
-      posts: {
-        create: {
-          title: 'Join us for Prisma Day 2019 in Berlin',
-          content: 'https://www.prisma.io/day/',
-          published: true,
-        },
+      itemFile: {
+        create: tireItemData[0]
       },
-    },
-  });
-  const user2 = await prisma.user.create({
-    data: {
-      email: 'bart@simpson.com',
-      firstname: 'Bart',
-      lastname: 'Simpson',
-      role: 'ADMIN',
-      password: '$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm', // secret42
-      posts: {
-        create: [
-          {
-            title: 'Subscribe to GraphQL Weekly for community news',
-            content: 'https://graphqlweekly.com/',
-            published: true,
-          },
-          {
-            title: 'Follow Prisma on Twitter',
-            content: 'https://twitter.com/prisma',
-            published: false,
-          },
-        ],
-      },
-    },
+      quantity: 100,
+      dateOfManufacture: new Date('2019-02-24'),
+      sellingPrice: 150,
+      averageSellingPrice: 100,
+      purchasePrice: 90,
+      purchaseBill: {
+        create: purchaseBillData[0],
+      }
+    }
   });
 
-  console.log({ user1, user2 });
+  await prisma.tireInventory.create({
+    data: {
+      itemFile: {
+        create: tireItemData[1]
+      },
+      quantity: 1000,
+      dateOfManufacture: new Date('2020-02-24'),
+      sellingPrice: 300,
+      averageSellingPrice: 20,
+      purchasePrice: 200,
+      purchaseBill: {
+        create: purchaseBillData[1],
+      }
+    }
+  });
+
+  await prisma.tireInventory.create({
+    data: {
+      itemFile: {
+        create: tireItemData[0]
+      },
+      quantity: 100,
+      dateOfManufacture: new Date('2018-12-21'),
+      sellingPrice: 80,
+      averageSellingPrice: 90,
+      purchasePrice: 30,
+      purchaseBill: {
+        create: purchaseBillData[2],
+      }
+    }
+  });
+
+  await prisma.tireInventory.create({
+    data: {
+      itemFile: {
+        create: tireItemData[2]
+      },
+      quantity: 50,
+      dateOfManufacture: new Date('2021-01-18'),
+      sellingPrice: 500,
+      averageSellingPrice: 480,
+      purchasePrice: 360,
+      purchaseBill: {
+        create: purchaseBillData[3],
+      }
+    }
+  });
+
+  await prisma.tireInventory.create({
+    data: {
+      itemFile: {
+        create: tireItemData[1]
+      },
+      quantity: 150,
+      dateOfManufacture: new Date('2021-08-02'),
+      sellingPrice: 900,
+      averageSellingPrice: 780,
+      purchasePrice: 560,
+      purchaseBill: {
+        create: purchaseBillData[4],
+      }
+    }
+  });
+
 }
 
 main()
