@@ -58,7 +58,7 @@ export class PurchaseBillRepository {
   removeAll() {
     return this.prisma.purchaseBill.deleteMany();
   }
-  getAllPaid() {
+  getNotPaid() {
     return this.prisma.$queryRaw(
       'SELECT * FROM "PurchaseBill" WHERE "totalCost" != "costPaid";'
     );

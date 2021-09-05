@@ -64,6 +64,8 @@ CREATE TABLE "PurchaseBill" (
     "tireQuantity" INTEGER NOT NULL,
     "costPaid" INTEGER NOT NULL,
     "vendor_id" TEXT NOT NULL,
+    "nextPaymentDate" TIMESTAMP(3),
+    "nextPaymentAmount" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

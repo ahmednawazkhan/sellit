@@ -27,8 +27,8 @@ export class PurchaseBillService {
   remove(id: string) {
     return this.purchaseBillRepository.remove(id);
   }
-  getAllPaid() {
-    return this.purchaseBillRepository.getAllPaid();
+  getNotPaid() {
+    return this.purchaseBillRepository.getNotPaid();
   }
   getTireInventory(id: string) {
     return this.purchaseBillRepository.getTireInvetory(id);
@@ -38,7 +38,7 @@ export class PurchaseBillService {
     const tireQuantity = (await this.tireInventoryRepository.countQuantity(id))._sum.quantity;
     const totalQuantity = (await this.purchaseBillRepository.findOne(id)).tireQuantity;
 
-    return totalQuantity - tireQuantity;
+    return (totalQuantity - tireQuantity);
   }
 
   getTotalTires(month: number) {

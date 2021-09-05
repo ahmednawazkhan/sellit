@@ -3,13 +3,12 @@ import * as dotenv from 'dotenv';
 import { tireItemData } from './seed/itemFile';
 import { purchaseBillData } from './seed/purchaseBill';
 
-const prisma = new PrismaClient(
-);
-
+const prisma = new PrismaClient();
 async function main() {
   dotenv.config();
   console.log('Seeding...');
-  await prisma.tireInventory.create({
+
+  const tire1 = await prisma.tireInventory.create({
     data: {
       itemFile: {
         create: tireItemData[0]
@@ -22,10 +21,15 @@ async function main() {
       purchaseBill: {
         create: purchaseBillData[0],
       }
+    },
+    include: {
+      purchaseBill: true
     }
+
   });
 
-  await prisma.tireInventory.create({
+
+  const tire2 = await prisma.tireInventory.create({
     data: {
       itemFile: {
         create: tireItemData[1]
@@ -38,13 +42,23 @@ async function main() {
       purchaseBill: {
         create: purchaseBillData[1],
       }
+    },
+    include: {
+      purchaseBill: true
     }
   });
 
-  await prisma.tireInventory.create({
+  const tire3 = await prisma.tireInventory.create({
     data: {
       itemFile: {
-        create: tireItemData[0]
+        connect: {
+          brand_size_pattern_made: {
+            brand: tireItemData[0].brand,
+            size: tireItemData[0].size,
+            pattern: tireItemData[0].pattern,
+            made: tireItemData[0].made,
+          }
+        }
       },
       quantity: 100,
       dateOfManufacture: new Date('2018-12-21'),
@@ -54,10 +68,13 @@ async function main() {
       purchaseBill: {
         create: purchaseBillData[2],
       }
+    },
+    include: {
+      purchaseBill: true
     }
   });
 
-  await prisma.tireInventory.create({
+  const tire4 = await prisma.tireInventory.create({
     data: {
       itemFile: {
         create: tireItemData[2]
@@ -73,10 +90,17 @@ async function main() {
     }
   });
 
-  await prisma.tireInventory.create({
+  const tire5 = await prisma.tireInventory.create({
     data: {
       itemFile: {
-        create: tireItemData[1]
+        connect: {
+          brand_size_pattern_made: {
+            brand: tireItemData[1].brand,
+            size: tireItemData[1].size,
+            pattern: tireItemData[1].pattern,
+            made: tireItemData[1].made,
+          }
+        },
       },
       quantity: 150,
       dateOfManufacture: new Date('2021-08-02'),
@@ -88,6 +112,8 @@ async function main() {
       }
     }
   });
+
+  console.log(tire1, tire2, tire3, tire4, tire5)
 
 }
 

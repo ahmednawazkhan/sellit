@@ -48,7 +48,7 @@ export class TireInventoryController {
 
   @ApiOkResponse({
     type: TireInventory,
-    description: 'get all the tire inventory entities',
+    description: 'get the totla no of tires',
   })
   @Get('/total')
   getTotalTires() {
@@ -100,11 +100,11 @@ export class TireInventoryController {
   }
   @ApiOkResponse({
     type: TireInventory,
-    description: 'get the vendor from which a given tire was bought',
+    description: 'get all the purchase bill  for a tire inventory',
   })
   @Get('/purchase-bill/:id')
-  async getPurchaseBill(@Param('id') itemFileId: string) {
-    return this.tireInventoryService.getPurchaseBill(itemFileId);
+  async getPurchaseBill(@Param('id') id: string) {
+    return this.tireInventoryService.getPurchaseBill(id);
   }
   @ApiOkResponse({
     type: TireInventory,

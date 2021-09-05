@@ -57,11 +57,11 @@ export class PurchaseBillController {
 
   @ApiOkResponse({
     type: PurchaseBill,
-    description: 'get all the paid purchase bills',
+    description: 'get all the not paid purchase bills',
   })
-  @Get('/all-paid')
+  @Get('/not-paid')
   getAllPaid() {
-    return this.purchaseBillService.getAllPaid();
+    return this.purchaseBillService.getNotPaid();
   }
 
   @ApiOkResponse({
@@ -89,10 +89,7 @@ export class PurchaseBillController {
   remove(@Param('id') id: string) {
     return this.purchaseBillService.remove(id);
   }
-  @ApiOkResponse({
-    type: PurchaseBill,
-    description: 'get all the paid purchase bills',
-  })
+
   @ApiOkResponse({
     type: PurchaseBill,
     description: 'get Tire Inventory for a given purchase bill id',
