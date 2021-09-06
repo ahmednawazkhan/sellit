@@ -38,7 +38,7 @@ describe('Vendor (e2e)', () => {
   });
 
   afterEach(async () => {
-    await vendorService.removeAll();
+    await vendorService.remove(defaultVendor.id);
   });
 
   afterAll(async () => {

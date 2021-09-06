@@ -27,6 +27,9 @@ export class PurchaseBillService {
   remove(id: string) {
     return this.purchaseBillRepository.remove(id);
   }
+  removeAll() {
+    return this.purchaseBillRepository.removeAll();
+  }
   getNotPaid() {
     return this.purchaseBillRepository.getNotPaid();
   }

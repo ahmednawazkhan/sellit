@@ -6,6 +6,10 @@ import { purchaseBillData } from './seed/purchaseBill';
 const prisma = new PrismaClient();
 async function main() {
   dotenv.config();
+  if (process.env.POSTGRES_DB === 'sellit_tests') {
+    console.log('Not Seeding in test')
+    return
+  }
   console.log('Seeding...');
 
   const tire1 = await prisma.tireInventory.create({
