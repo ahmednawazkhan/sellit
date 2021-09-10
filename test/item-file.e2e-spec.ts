@@ -5,13 +5,23 @@ import { CreateItemFileDto } from 'src/inventory/item-file/dto/create-item-file.
 import { UpdateItemFileDto } from 'src/inventory/item-file/dto/update-item-file.dto';
 import { TireItemFile } from 'src/inventory/item-file/entities/item-file.entity';
 import { ItemFileService } from 'src/inventory/item-file/item-file.service';
+import { PurchaseBillService } from 'src/inventory/purchase-bill/purchase-bill.service';
+import { TireInventoryService } from 'src/inventory/tire-inventory/tire-inventory.service';
+import { VendorService } from 'src/inventory/vendor/vendor.service';
 import request from 'supertest';
+import { createPurchaseBillMock } from '__mocks__/purchase-bill.mock';
+import { createTireInventoryMock } from '__mocks__/tire-inventory.mock';
 import { createTireItemFileMock } from '__mocks__/tire-item-file.mock';
+import { createVendorMock } from '__mocks__/vendor.mock';
 import { AppModule } from '../src/app.module';
 
-describe('Vendor (e2e)', () => {
+describe('Tire Item File (e2e)', () => {
   let app: INestApplication;
   let tireItemFileService: ItemFileService;
+  let vendorService: VendorService;
+  let purchaseBillService: PurchaseBillService;
+  let tireInventoryService: TireInventoryService;
+
   // TODO: see if route can come from Reflection
   let basePath = '/item-file';
   let defaultTireItemFile: TireItemFile;
@@ -21,14 +31,17 @@ describe('Vendor (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
-
     app = moduleFixture.createNestApplication();
     await app.init();
-
     tireItemFileService = app.get(ItemFileService);
+    purchaseBillService = app.get(PurchaseBillService);
+    vendorService = app.get(VendorService);
+    tireInventoryService = app.get(TireInventoryService);
+
   });
 
   beforeEach(async () => {
+
     defaultTireItemFile = await tireItemFileService.create(
       createTireItemFileMock
     );
@@ -40,6 +53,9 @@ describe('Vendor (e2e)', () => {
   });
 
   afterEach(async () => {
+    await tireInventoryService.removeAll();
+    await purchaseBillService.removeAll();
+    await vendorService.removeAll();
     await tireItemFileService.removeAll();
   });
 
@@ -114,8 +130,8 @@ describe('Vendor (e2e)', () => {
 
   it('should update item-file against an id with provided data (PATCH)', async () => {
     const tireItemFileTwo: UpdateItemFileDto = {
-      brand: TireBrand.DUNLOP,
-      made: TireMade.INDONESIA,
+      brand: TireBrand.YOKOHAMA,
+      made: TireMade.PAKISTAN,
     };
     await request(app.getHttpServer())
       .patch(`${basePath}/${defaultTireItemFile.id}`)
@@ -158,6 +174,30 @@ describe('Vendor (e2e)', () => {
       .expect(200)
       .expect(({ body }) => {
         expect(body).toEqual({});
+      });
+  });
+
+  it('should return all the tire inventory from item-file id', async () => {
+
+    const vendor = await vendorService.create(createVendorMock);
+    createPurchaseBillMock.vendor_id = vendor.id
+    const purchaseBill = await purchaseBillService.create(createPurchaseBillMock);
+    createTireInventoryMock.itemFileId = defaultTireItemFile.id
+    createTireInventoryMock.purchaseId = purchaseBill.id;
+    const tireInventory = await tireInventoryService.create(createTireInventoryMock);
+    const tireInventoryClone = {
+      ...tireInventory,
+      dateOfManufacture: tireInventory.dateOfManufacture.toISOString(),
+      createdAt: tireInventory.createdAt.toISOString(),
+      updatedAt: tireInventory.updatedAt.toISOString()
+    }
+    return request(app.getHttpServer())
+      .get(`${basePath}/tire-inventory/${defaultTireItemFile.id}`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toStrictEqual(
+          expect.arrayContaining([tireInventoryClone])
+        );
       });
   });
 });

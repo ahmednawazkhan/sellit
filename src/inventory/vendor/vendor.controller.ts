@@ -64,7 +64,7 @@ export class VendorController {
   }
   @ApiOkResponse({
     type: Vendor,
-    description: 'get vendor by given id',
+    description: 'get purchase bill by given vendor id',
   })
   @Get('/purchase-bills/:id')
   getPurchaseBills(@Param('id') id: string) {

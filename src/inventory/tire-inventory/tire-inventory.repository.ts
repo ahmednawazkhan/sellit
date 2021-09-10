@@ -15,14 +15,11 @@ export class TireInventoryRepository {
     return this.prisma.tireInventory
       .create({
         data: createTireInventoryDto,
-      })
-      .catch((e) => {
-        throw new BadRequestException(e.message);
       });
   }
 
   findAll() {
-    this.prisma.tireInventory.findMany();
+    return this.prisma.tireInventory.findMany();
   }
 
   findOne(id: string) {
@@ -58,7 +55,8 @@ export class TireInventoryRepository {
           id,
         },
       })
-      .catch((_) => { });
+      .catch((_) => {
+      });
   }
 
   removeAll() {

@@ -1,31 +1,37 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { VendorType } from '@prisma/client';
+import { PurchaseBillService } from 'src/inventory/purchase-bill/purchase-bill.service';
 import { CreateVendorDto } from 'src/inventory/vendor/dto/create-vendor.dto';
 import { UpdateVendorDto } from 'src/inventory/vendor/dto/update-vendor.dto';
 import { Vendor } from 'src/inventory/vendor/entities/vendor.entity';
 import { VendorService } from 'src/inventory/vendor/vendor.service';
 import request from 'supertest';
+import { createPurchaseBillMock } from '__mocks__/purchase-bill.mock';
 import { createVendorMock } from '__mocks__/vendor.mock';
 import { AppModule } from '../src/app.module';
 
 describe('Vendor (e2e)', () => {
   let app: INestApplication;
   let vendorService: VendorService;
+  let purchaseBillService: PurchaseBillService;
   // TODO: see if route can come from Reflection
   let basePath = '/vendor';
   let defaultVendor: Vendor;
   let defaultVendorClone;
 
   beforeAll(async () => {
+    const NODE_ENV = process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : '';
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
+      imports: [AppModule]
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
 
     vendorService = app.get(VendorService);
+    purchaseBillService = app.get(PurchaseBillService);
+
   });
 
   beforeEach(async () => {
@@ -38,7 +44,9 @@ describe('Vendor (e2e)', () => {
   });
 
   afterEach(async () => {
-    await vendorService.remove(defaultVendor.id);
+    await purchaseBillService.removeAll();
+    await vendorService.removeAll();
+
   });
 
   afterAll(async () => {
@@ -137,4 +145,22 @@ describe('Vendor (e2e)', () => {
         expect(body).toEqual({});
       });
   });
+  it('should return purchase bill of a vendor with provided id (GET)', async () => {
+    createPurchaseBillMock.vendor_id = defaultVendor.id;
+    const purchaseBill = await purchaseBillService.create(createPurchaseBillMock);
+    const purchaseBillClone = {
+      ...purchaseBill,
+      createdAt: purchaseBill.createdAt.toISOString(),
+      updatedAt: purchaseBill.updatedAt.toISOString()
+    }
+    return request(app.getHttpServer())
+      .get(`${basePath}/purchase-bills/${defaultVendor.id}`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toStrictEqual(
+          expect.arrayContaining([purchaseBillClone])
+        );
+      });
+  });
+
 });

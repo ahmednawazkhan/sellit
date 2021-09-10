@@ -36,6 +36,7 @@ describe('Purchase Bill (e2e)', () => {
   });
 
   beforeEach(async () => {
+    await vendorService.removeAll();
     defaultVendor = await vendorService.create(createVendorMock);
     createPurchaseBillMock.vendor_id = defaultVendor.id
     defaultPurchaseBill = await purchaseBillService.create(createPurchaseBillMock);
@@ -47,11 +48,12 @@ describe('Purchase Bill (e2e)', () => {
   });
 
   afterEach(async () => {
-    await vendorService.remove(defaultVendor.id)
-    await purchaseBillService.remove(defaultPurchaseBill.id);
+    await purchaseBillService.removeAll();
+    await vendorService.removeAll()
   });
 
   afterAll(async () => {
+
     await app.close();
   });
 

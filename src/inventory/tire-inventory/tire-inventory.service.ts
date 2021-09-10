@@ -8,7 +8,7 @@ export class TireInventoryService {
   constructor(
     private readonly tireInventoryRepository: TireInventoryRepository,
   ) { }
-  async create(createTireInventoryDto: CreateTireInventoryDto) {
+  create(createTireInventoryDto: CreateTireInventoryDto) {
     return this.tireInventoryRepository.create(createTireInventoryDto);
   }
 
@@ -26,6 +26,9 @@ export class TireInventoryService {
 
   remove(id: string) {
     return this.tireInventoryRepository.remove(id);
+  }
+  removeAll() {
+    return this.tireInventoryRepository.removeAll();
   }
   totalQuantity(purchaseId: string) {
     return this.tireInventoryRepository.countQuantity(purchaseId);

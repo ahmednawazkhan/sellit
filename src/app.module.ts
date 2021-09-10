@@ -7,10 +7,12 @@ import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, load: [config] }),
+    ConfigModule.forRoot({
+      isGlobal: true, load: [config],
+    }),
     PrismaModule,
     InventoryModule,
   ],
   providers: [DateScalar],
 })
-export class AppModule {}
+export class AppModule { }
