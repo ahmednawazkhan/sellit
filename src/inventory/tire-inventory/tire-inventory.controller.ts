@@ -41,19 +41,21 @@ export class TireInventoryController {
   findAll() {
     return this.tireInventoryService.findAll();
   }
-  @ApiOkResponse({
-    type: TireInventory,
-    description: 'get the tire inventory entity by given id',
-  })
+
 
   @ApiOkResponse({
     type: TireInventory,
-    description: 'get the totla no of tires',
+    description: 'get the total no of tires',
   })
   @Get('/total')
   getTotalTires() {
     return this.tireInventoryService.getTotalTires();
   }
+
+  @ApiOkResponse({
+    type: TireInventory,
+    description: 'get the tire inventory entity by given id',
+  })
 
   @Get(':id')
   findOne(@Param('id') id: string) {

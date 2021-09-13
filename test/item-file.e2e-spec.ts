@@ -74,6 +74,7 @@ describe('Tire Item File (e2e)', () => {
       });
   });
 
+
   it('should return item-file with provided id (GET)', () => {
     return request(app.getHttpServer())
       .get(`${basePath}/${defaultTireItemFile.id}`)
@@ -116,6 +117,7 @@ describe('Tire Item File (e2e)', () => {
       expect.objectContaining(tireItemFileTwo)
     );
   });
+
 
   it('should return 409 when duplicate item-file data is provided (POST)', async () => {
     return request(app.getHttpServer())

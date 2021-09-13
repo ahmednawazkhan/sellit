@@ -2,19 +2,26 @@ import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { Vendor } from "@prisma/client";
 import { AppModule } from "src/app.module";
+import { ItemFileService } from "src/inventory/item-file/item-file.service";
 import { CreatePurchaseBillDto } from "src/inventory/purchase-bill/dto/create-purchase-bill.dto";
 import { UpdatePurchaseBillDto } from "src/inventory/purchase-bill/dto/update-purchase-bill.dto";
 import { PurchaseBill } from "src/inventory/purchase-bill/entities/purchase-bill.entity";
 import { PurchaseBillService } from "src/inventory/purchase-bill/purchase-bill.service";
+import { TireInventoryService } from "src/inventory/tire-inventory/tire-inventory.service";
 import { VendorService } from "src/inventory/vendor/vendor.service";
 import request from 'supertest';
 import { createPurchaseBillMock } from "__mocks__/purchase-bill.mock";
+import { createTireInventoryMock } from "__mocks__/tire-inventory.mock";
+import { createTireItemFileMock } from "__mocks__/tire-item-file.mock";
 import { createVendorMock } from "__mocks__/vendor.mock";
 
 describe('Purchase Bill (e2e)', () => {
   let app: INestApplication;
   let purchaseBillService: PurchaseBillService;
   let vendorService: VendorService;
+  let tireItemFileService: ItemFileService;
+  let tireInventoryService: TireInventoryService;
+
 
   // TODO: see if route can come from Reflection
   let basePath = '/purchase-bill';
@@ -33,6 +40,9 @@ describe('Purchase Bill (e2e)', () => {
 
     vendorService = app.get(VendorService);
     purchaseBillService = app.get(PurchaseBillService);
+    tireInventoryService = app.get(TireInventoryService);
+    tireItemFileService = app.get(ItemFileService);
+
   });
 
   beforeEach(async () => {
@@ -48,8 +58,10 @@ describe('Purchase Bill (e2e)', () => {
   });
 
   afterEach(async () => {
+    await tireInventoryService.removeAll();
     await purchaseBillService.removeAll();
     await vendorService.removeAll()
+    await tireItemFileService.removeAll();
   });
 
   afterAll(async () => {
@@ -57,8 +69,7 @@ describe('Purchase Bill (e2e)', () => {
     await app.close();
   });
 
-
-  it('should return all purchase bills (GET)', () => {
+  it('should return the all purchase bills (GET)', () => {
     return request(app.getHttpServer())
       .get(basePath)
       .expect(200)
@@ -68,12 +79,79 @@ describe('Purchase Bill (e2e)', () => {
         );
       });
   });
+
+  it('should return the total cost of purchase bills in a given month (GET)', () => {
+    const month = 0
+    return request(app.getHttpServer())
+      .get(`${basePath}/total-cost?month=${month}`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toHaveProperty('totalCost')
+        expect(body).toEqual({
+          totalCost: defaultPurchaseBill.totalCost,
+        })
+      });
+  });
+
+  it('should return the total tires of purchase bills in a given month (GET)', () => {
+    const month = 0
+    return request(app.getHttpServer())
+      .get(`${basePath}/total-tires?month=${month}`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toHaveProperty('tireQuantity')
+        expect(body).toEqual({
+          tireQuantity: defaultPurchaseBill.tireQuantity,
+        })
+      });
+  });
+
+  it('should return the purchase bills not paid (GET)', async () => {
+    const unPaidBills = await purchaseBillService.getNotPaid();
+
+    return request(app.getHttpServer())
+      .get(`${basePath}/payments`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toStrictEqual(unPaidBills);
+      });
+  });
+
+  it('should return the all nearest purchase payments (GET)', async () => {
+    const nearestBills = await purchaseBillService.getNearestPayments();
+
+    return request(app.getHttpServer())
+      .get(`${basePath}/payments`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toStrictEqual(nearestBills);
+      });
+  });
+
+
   it('should return purchase bill with provided id (GET)', () => {
     return request(app.getHttpServer())
       .get(`${basePath}/${defaultPurchaseBill.id}`)
       .expect(200)
       .expect(({ body }) => {
         expect(body).toStrictEqual(defaultPurchaseBillClone);
+      });
+  });
+
+
+  it('should return the all remaining tires by given purchase id  (GET)', async () => {
+    const tireItem = await tireItemFileService.create(createTireItemFileMock);
+    createTireInventoryMock.itemFileId = tireItem.id;
+    createTireInventoryMock.purchaseId = defaultPurchaseBill.id;
+    await tireInventoryService.create(createTireInventoryMock);
+
+    const rem = await purchaseBillService.getRemainingTires(defaultPurchaseBill.id);
+
+    return request(app.getHttpServer())
+      .get(`${basePath}/remaining/${defaultPurchaseBill.id}`)
+      .expect(200)
+      .expect((remaining) => {
+        expect(remaining.text).toBe(rem.toLocaleString());
       });
   });
 
@@ -86,6 +164,29 @@ describe('Purchase Bill (e2e)', () => {
         expect(body).toHaveProperty('error');
       });
   });
+
+  it('should return tire inventory for  with provided purchase bill id (GET)', async () => {
+    const tireItem = await tireItemFileService.create(createTireItemFileMock);
+    createTireInventoryMock.itemFileId = tireItem.id;
+    createTireInventoryMock.purchaseId = defaultPurchaseBill.id;
+    const tireInventory = await tireInventoryService.create(createTireInventoryMock);
+    const tireInventoryClone = {
+      ...tireInventory,
+      dateOfManufacture: tireInventory.dateOfManufacture.toISOString(),
+      createdAt: tireInventory.createdAt.toISOString(),
+      updatedAt: tireInventory.updatedAt.toISOString(),
+    }
+    return request(app.getHttpServer())
+      .get(`${basePath}/tire-inventory/${defaultPurchaseBill.id}`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toStrictEqual(
+          expect.arrayContaining([tireInventoryClone])
+        );
+      });
+  });
+
+
 
   it('should create purchase bill with provided data (POST)', async () => {
     const purchaseBillTwo: CreatePurchaseBillDto = {

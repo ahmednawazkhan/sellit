@@ -97,6 +97,88 @@ describe('Tire Inventory (e2e)', () => {
         );
       });
   });
+
+
+  it('should return total number of tire Invenotry (GET)', async () => {
+    const tireItemFile: CreateItemFileDto = {
+      brand: TireBrand.MICHELIN, size: TireSize.ONEEIGHTFIVE_EIGHTYFIVE, pattern: TirePattern.CUP, made: TireMade.JAPAN,
+    }
+    const itemFileTwo = await tireItemFileService.create(tireItemFile);
+    const TireInventoryTwo: CreateTireInventoryDto = {
+      ...createTireInventoryMock,
+      quantity: 20,
+      averageSellingPrice: 15,
+      dateOfManufacture: new Date('2020-12-21'),
+      purchasePrice: 10,
+      sellingPrice: 20,
+      itemFileId: itemFileTwo.id
+    };
+
+    const tireTwo = await tireInventoryService.create(TireInventoryTwo);
+
+    return request(app.getHttpServer())
+      .get(`${basePath}/total`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toStrictEqual({
+          quantity: (defaultTireInventory.quantity + tireTwo.quantity)
+        });
+      });
+  });
+
+  it('should return total quantity of tire Invenotry for given purchase id(GET)', async () => {
+    const tireItemFile: CreateItemFileDto = {
+      brand: TireBrand.MICHELIN, size: TireSize.ONEEIGHTFIVE_EIGHTYFIVE, pattern: TirePattern.CUP, made: TireMade.JAPAN,
+    }
+    const itemFileTwo = await tireItemFileService.create(tireItemFile);
+    const TireInventoryTwo: CreateTireInventoryDto = {
+      ...createTireInventoryMock,
+      quantity: 20,
+      averageSellingPrice: 15,
+      dateOfManufacture: new Date('2020-12-21'),
+      purchasePrice: 10,
+      sellingPrice: 20,
+      itemFileId: itemFileTwo.id
+    };
+
+    const tireTwo = await tireInventoryService.create(TireInventoryTwo);
+    return request(app.getHttpServer())
+      .get(`${basePath}/quantity-purchase/${defaultPurchaseBill.id}`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toStrictEqual({
+          _sum: {
+            quantity: defaultTireInventory.quantity + tireTwo.quantity
+          }
+        });
+      });
+  });
+
+  it('should return total quantity of tire Invenotry for given item-file id(GET)', async () => {
+    const TireInventoryTwo: CreateTireInventoryDto = {
+      ...createTireInventoryMock,
+      quantity: 20,
+      averageSellingPrice: 15,
+      dateOfManufacture: new Date('2020-12-21'),
+      purchasePrice: 10,
+      sellingPrice: 20,
+    };
+
+    const tireTwo = await tireInventoryService.create(TireInventoryTwo);
+
+
+    return request(app.getHttpServer())
+      .get(`${basePath}/quantity-itemfile/${defaultItemFile.id}`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toStrictEqual({
+          sum: {
+            quantity: defaultTireInventory.quantity + tireTwo.quantity,
+          }
+        });
+      });
+  });
+
   it('should return tire Inventory with provided id (GET)', () => {
     return request(app.getHttpServer())
       .get(`${basePath}/${defaultTireInventory.id}`)
@@ -116,7 +198,7 @@ describe('Tire Inventory (e2e)', () => {
       });
   });
 
-  it('should create purchase bill with provided data (POST)', async () => {
+  it('should create tire inventory with provided data (POST)', async () => {
     const tireItemFile: CreateItemFileDto = {
       brand: TireBrand.MICHELIN, size: TireSize.ONEEIGHTFIVE_EIGHTYFIVE, pattern: TirePattern.CUP, made: TireMade.JAPAN,
     }
@@ -148,7 +230,7 @@ describe('Tire Inventory (e2e)', () => {
     return expect(dbPurchaseTwo).toEqual(expect.objectContaining(TireInventoryTwo));
   });
 
-  it('should update purchase bill against an id with provided data (PATCH)', async () => {
+  it('should update tire inventory against an id with provided data (PATCH)', async () => {
     const purchaseTwo: UpdateTireInventoryDto = {
       purchasePrice: 25000,
     };
@@ -167,6 +249,23 @@ describe('Tire Inventory (e2e)', () => {
 
     return expect(dbDefaultPurchase).toEqual(expect.objectContaining(purchaseTwo));
   });
+
+  it('should return all purchaseBill for given id (GET)', () => {
+    const purchaBillClone = {
+      ...defaultPurchaseBill,
+      createdAt: defaultPurchaseBill.createdAt.toISOString(),
+      updatedAt: defaultPurchaseBill.updatedAt.toISOString()
+    }
+    return request(app.getHttpServer())
+      .get(`${basePath}/purchase-bill/${defaultTireInventory.id}`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toStrictEqual(
+          purchaBillClone
+        );
+      });
+  });
+
 
   it('should delete purchase bill against an id (DELETE)', async () => {
     await request(app.getHttpServer())
