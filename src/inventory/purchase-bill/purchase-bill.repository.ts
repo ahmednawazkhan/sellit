@@ -59,7 +59,7 @@ export class PurchaseBillRepository {
           id,
         },
       })
-      .catch((_) => {});
+      .catch(() => null);
   }
 
   removeAll() {
@@ -91,7 +91,7 @@ export class PurchaseBillRepository {
   }
 
   async getTotalTires(month: number) {
-    let date = new Date();
+    const date = new Date();
     if (month == 0) {
       return (
         await this.prisma.purchaseBill.aggregate({
@@ -120,7 +120,7 @@ export class PurchaseBillRepository {
     )._sum;
   }
   async getTotalPurchaseCost(month: number) {
-    let date = new Date();
+    const date = new Date();
     if (month === 0 || month === -1) {
       return (
         await this.prisma.purchaseBill.aggregate({
@@ -150,7 +150,7 @@ export class PurchaseBillRepository {
     }
   }
 
-  async getNearestPayments(limit: number = 3) {
+  async getNearestPayments(limit = 3) {
     // return this.prisma.$queryRaw<PurchaseBill[]>(
     //   `SELECT * FROM blog."PurchaseBill" WHERE "totalCost" > "costPaid" ORDER BY "nextPaymentDate" ASC LIMIT ${limit};`
     // );

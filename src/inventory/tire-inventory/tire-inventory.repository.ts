@@ -58,7 +58,7 @@ export class TireInventoryRepository {
           id,
         },
       })
-      .catch((_) => {});
+      .catch(() => null);
   }
 
   removeAll() {

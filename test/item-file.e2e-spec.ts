@@ -13,7 +13,7 @@ describe('Vendor (e2e)', () => {
   let app: INestApplication;
   let tireItemFileService: ItemFileService;
   // TODO: see if route can come from Reflection
-  let basePath = '/item-file';
+  const basePath = '/item-file';
   let defaultTireItemFile: TireItemFile;
   let defaultTireItemFileClone;
 

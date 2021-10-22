@@ -5,7 +5,7 @@ import { VendorRepository } from './vendor.repository';
 
 @Injectable()
 export class VendorService {
-  constructor(private readonly vendorRepository: VendorRepository) { }
+  constructor(private readonly vendorRepository: VendorRepository) {}
 
   create(createVendorDto: CreateVendorDto) {
     return this.vendorRepository.create(createVendorDto);

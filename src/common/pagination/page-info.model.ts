@@ -1,4 +1,3 @@
-
 export class PageInfo {
   // @Field((type) => String, { nullable: true })
   endCursor?: string;

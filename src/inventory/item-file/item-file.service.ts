@@ -5,7 +5,7 @@ import { ItemFileRepository } from './item-file.repository';
 
 @Injectable()
 export class ItemFileService {
-  constructor(private readonly itemFileRepository: ItemFileRepository) { }
+  constructor(private readonly itemFileRepository: ItemFileRepository) {}
 
   create(createItemFileDto: CreateItemFileDto) {
     return this.itemFileRepository.create(createItemFileDto);

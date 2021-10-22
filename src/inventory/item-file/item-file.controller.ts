@@ -5,7 +5,7 @@ import {
   Get,
   Param,
   Patch,
-  Post
+  Post,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CreateItemFileDto } from './dto/create-item-file.dto';
@@ -16,7 +16,7 @@ import { ItemFileService } from './item-file.service';
 @ApiTags('Tire Item File')
 @Controller('item-file')
 export class ItemFileController {
-  constructor(private readonly itemFileService: ItemFileService) { }
+  constructor(private readonly itemFileService: ItemFileService) {}
 
   @ApiOkResponse({
     type: TireItemFile,
