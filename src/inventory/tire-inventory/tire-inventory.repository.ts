@@ -22,7 +22,7 @@ export class TireInventoryRepository {
   }
 
   findAll() {
-    return this.prisma.tireInventory.findMany();
+    this.prisma.tireInventory.findMany();
   }
 
   findOne(id: string) {
@@ -63,5 +63,72 @@ export class TireInventoryRepository {
 
   removeAll() {
     return this.prisma.tireInventory.deleteMany();
+  }
+
+  async countQuantity(purchaseId: string) {
+    return (
+      await this.prisma.tireInventory.aggregate({
+        where: {
+          purchaseId,
+        },
+        _sum: {
+          quantity: true,
+        },
+      })
+    )._sum;
+  }
+
+  async countQuantityItemFile(itemFileId: string) {
+    return (
+      await this.prisma.tireInventory.aggregate({
+        where: {
+          itemFileId,
+        },
+        _sum: {
+          quantity: true,
+        },
+      })
+    )._sum;
+  }
+
+  async getPurchaseBill(id: string) {
+    return (
+      await this.prisma.tireInventory.findUnique({
+        where: {
+          id,
+        },
+        rejectOnNotFound: true,
+        select: {
+          purchaseBill: true,
+        },
+      })
+    ).purchaseBill;
+  }
+
+  async getVendor(id: string) {
+    return (
+      await this.prisma.tireInventory.findUnique({
+        where: {
+          id,
+        },
+        rejectOnNotFound: true,
+        select: {
+          purchaseBill: {
+            select: {
+              vendor: true,
+            },
+          },
+        },
+      })
+    ).purchaseBill.vendor;
+  }
+  async getTotalTires() {
+    return (
+      await this.prisma.tireInventory.aggregate({
+        _sum: {
+          quantity: true,
+        },
+      })
+    )._sum;
   }
 }

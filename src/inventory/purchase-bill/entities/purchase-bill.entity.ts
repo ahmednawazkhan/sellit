@@ -19,6 +19,12 @@ export class PurchaseBill {
   @ApiProperty()
   vendor_id: string;
 
+  @ApiProperty({ nullable: true })
+  nextPaymentDate?: Date;
+
+  @ApiProperty({ nullable: true })
+  nextPaymentAmount?: number;
+
   createdAt: Date;
   updatedAt: Date;
 }

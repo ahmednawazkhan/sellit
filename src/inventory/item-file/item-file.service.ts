@@ -5,7 +5,7 @@ import { ItemFileRepository } from './item-file.repository';
 
 @Injectable()
 export class ItemFileService {
-  constructor(private readonly itemFileRepository: ItemFileRepository) {}
+  constructor(private readonly itemFileRepository: ItemFileRepository) { }
 
   create(createItemFileDto: CreateItemFileDto) {
     return this.itemFileRepository.create(createItemFileDto);
@@ -29,5 +29,8 @@ export class ItemFileService {
 
   removeAll() {
     return this.itemFileRepository.removeAll();
+  }
+  getTireInventory(id: string) {
+    return this.itemFileRepository.getTireInventory(id);
   }
 }

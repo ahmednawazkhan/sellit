@@ -52,4 +52,18 @@ export class VendorRepository {
   removeAll() {
     return this.prisma.vendor.deleteMany();
   }
+  async getAllPurchaseBills(id: string) {
+    return (await this.prisma.vendor.findUnique({
+      where: {
+        id,
+      },
+      rejectOnNotFound: true,
+      select: {
+        purchaseBills: true,
+      },
+    }).catch((e) => {
+      throw new NotFoundException(e.message);
+    })).purchaseBills;
+
+  }
 }

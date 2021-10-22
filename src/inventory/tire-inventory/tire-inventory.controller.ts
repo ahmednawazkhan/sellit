@@ -23,11 +23,12 @@ export class TireInventoryController {
     description: 'create a  new tire inventory entity',
   })
   @Post()
-  create(@Body() createTireInventoryDto: CreateTireInventoryDto) {
+  async create(@Body() createTireInventoryDto: CreateTireInventoryDto) {
     return this.tireInventoryService.create(createTireInventoryDto);
   }
 
   @ApiOkResponse({
+    isArray: true,
     type: TireInventory,
     description: 'get all the tire inventory entities',
   })
@@ -35,6 +36,23 @@ export class TireInventoryController {
   findAll() {
     return this.tireInventoryService.findAll();
   }
+
+  // FIXME: check if works then modify others
+  @ApiOkResponse({
+    schema: {
+      properties: {
+        quantity: {
+          type: 'number',
+        },
+      },
+    },
+    description: 'get the totla no of tires',
+  })
+  @Get('/total-tires')
+  getTotalTires() {
+    return this.tireInventoryService.getTotalTires();
+  }
+
   @ApiOkResponse({
     type: TireInventory,
     description: 'get the tire inventory entity by given id',
@@ -63,5 +81,51 @@ export class TireInventoryController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.tireInventoryService.remove(id);
+  }
+
+  @ApiOkResponse({
+    schema: {
+      properties: {
+        quantity: {
+          type: 'number',
+        },
+      },
+    },
+    description: 'get the total quantity of tires for a  given purchase id',
+  })
+  @Get('/purchase-bill/:id/quantity')
+  totalQuantity(@Param('id') purchaseId: string) {
+    return this.tireInventoryService.totalQuantity(purchaseId);
+  }
+
+  @ApiOkResponse({
+    schema: {
+      properties: {
+        quantity: {
+          type: 'number',
+        },
+      },
+    },
+    description: 'get the total quantity of tires for a  given itemfile id',
+  })
+  @Get('/itemfile/:id/quantity')
+  totalQuantityItemFile(@Param('id') itemFileId: string) {
+    return this.tireInventoryService.totalQuantityItemFile(itemFileId);
+  }
+  @ApiOkResponse({
+    type: TireInventory,
+    description: 'get the purchase bill  for a tire inventory id',
+  })
+  @Get('/:id/purchase-bill')
+  async getPurchaseBill(@Param('id') id: string) {
+    return this.tireInventoryService.getPurchaseBill(id);
+  }
+  @ApiOkResponse({
+    type: TireInventory,
+    description: 'get the vendor from which a given tire was bought',
+  })
+  @Get('/:id/vendor')
+  getVendor(@Param('id') itemFileId: string) {
+    return this.tireInventoryService.getVendor(itemFileId);
   }
 }

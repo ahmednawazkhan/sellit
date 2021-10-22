@@ -6,7 +6,7 @@ import { AppModule } from './app.module';
 import {
   CorsConfig,
   NestConfig,
-  SwaggerConfig,
+  SwaggerConfig
 } from './configs/config.interface';
 
 async function bootstrap() {

@@ -62,6 +62,8 @@ model PurchaseBill {
   vendor             Vendor          @relation(fields: [vendor_id], references: [id])
   vendor_id          String
   tireInventoryItems TireInventory[]
+  nextPaymentDate    DateTime?
+  nextPaymentAmount  Int?
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }
@@ -74,6 +76,8 @@ model Vendor {
   purchaseBills PurchaseBill[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+
+  @@unique([name, type], name: "vendor_unique_name_and_type")
 }
 
 model TireInventory {
