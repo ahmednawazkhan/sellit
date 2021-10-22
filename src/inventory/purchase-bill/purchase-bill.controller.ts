@@ -48,7 +48,14 @@ export class PurchaseBillController {
   }
 
   @ApiOkResponse({
-    type: PurchaseBill,
+    schema: {
+      type: 'object',
+      properties: {
+        totalCost: {
+          type: 'number',
+        },
+      },
+    },
     description:
       'get the total purchase cost till given month (0 or -1: all time , 1: 1 month back, 6: six months back)',
   })
@@ -58,7 +65,14 @@ export class PurchaseBillController {
   }
 
   @ApiOkResponse({
-    type: PurchaseBill,
+    schema: {
+      type: 'object',
+      properties: {
+        tireQuantity: {
+          type: 'number',
+        },
+      },
+    },
     description:
       'get the total tires till given month (0 or -1: all time , 1: 1 month back, 6: six months back)',
   })

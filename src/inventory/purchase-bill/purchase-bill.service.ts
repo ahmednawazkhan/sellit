@@ -41,7 +41,7 @@ export class PurchaseBillService {
 
   async getRemainingTires(id: string) {
     const tireQuantity = (await this.tireInventoryRepository.countQuantity(id))
-      ._sum.quantity;
+      .quantity;
     const totalQuantity = (await this.purchaseBillRepository.findOne(id))
       .tireQuantity;
 

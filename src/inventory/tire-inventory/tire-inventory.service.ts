@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { PurchaseBillService } from '../purchase-bill/purchase-bill.service';
 import { CreateTireInventoryDto } from './dto/create-tire-inventory.dto';
 import { UpdateTireInventoryDto } from './dto/update-tire-inventory.dto';
 import { TireInventoryRepository } from './tire-inventory.repository';
@@ -7,8 +8,17 @@ import { TireInventoryRepository } from './tire-inventory.repository';
 export class TireInventoryService {
   constructor(
     private readonly tireInventoryRepository: TireInventoryRepository,
-  ) { }
+    private readonly purchaseBillService: PurchaseBillService
+  ) {}
   async create(createTireInventoryDto: CreateTireInventoryDto) {
+    const remaining = await this.purchaseBillService.getRemainingTires(
+      createTireInventoryDto.purchaseId
+    );
+    if (createTireInventoryDto.quantity > remaining) {
+      throw new BadRequestException(
+        'the quantity cannot exceed the total tires in purchase bill'
+      );
+    }
     return this.tireInventoryRepository.create(createTireInventoryDto);
   }
 
@@ -43,6 +53,4 @@ export class TireInventoryService {
   getTotalTires() {
     return this.tireInventoryRepository.getTotalTires();
   }
-
-
 }

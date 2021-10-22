@@ -30,7 +30,7 @@ export class VendorService {
   removeAll() {
     return this.vendorRepository.removeAll();
   }
-  getPurchaseBills(id: string) {
+  getPurchaseBillsByVendorId(id: string) {
     return this.vendorRepository.getAllPurchaseBills(id);
   }
 }
