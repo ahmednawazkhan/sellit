@@ -63,6 +63,7 @@ export class VendorController {
   remove(@Param('id') id: string) {
     return this.vendorService.remove(id);
   }
+
   @ApiOkResponse({
     type: Vendor,
     description: 'get all purchase bills by vendor id',

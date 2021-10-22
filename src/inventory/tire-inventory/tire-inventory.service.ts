@@ -10,6 +10,7 @@ export class TireInventoryService {
     private readonly tireInventoryRepository: TireInventoryRepository,
     private readonly purchaseBillService: PurchaseBillService
   ) {}
+
   async create(createTireInventoryDto: CreateTireInventoryDto) {
     const remaining = await this.purchaseBillService.getRemainingTires(
       createTireInventoryDto.purchaseId
@@ -37,15 +38,19 @@ export class TireInventoryService {
   remove(id: string) {
     return this.tireInventoryRepository.remove(id);
   }
+
   totalQuantity(purchaseId: string) {
     return this.tireInventoryRepository.countQuantity(purchaseId);
   }
+
   totalQuantityItemFile(itemFileId: string) {
     return this.tireInventoryRepository.countQuantityItemFile(itemFileId);
   }
+
   getPurchaseBill(id: string) {
     return this.tireInventoryRepository.getPurchaseBill(id);
   }
+
   getVendor(id: string) {
     return this.tireInventoryRepository.getVendor(id);
   }

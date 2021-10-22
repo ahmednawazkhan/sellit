@@ -122,6 +122,7 @@ export class TireInventoryRepository {
       })
     ).purchaseBill.vendor;
   }
+
   async getTotalTires() {
     return (
       await this.prisma.tireInventory.aggregate({

@@ -32,9 +32,11 @@ export class PurchaseBillService {
   remove(id: string) {
     return this.purchaseBillRepository.remove(id);
   }
+
   getUnPaidBills() {
     return this.purchaseBillRepository.getUnPaidBills();
   }
+
   getTireInventory(id: string) {
     return this.purchaseBillRepository.getTireInvetory(id);
   }
@@ -55,6 +57,7 @@ export class PurchaseBillService {
   getTotalCost(month: number) {
     return this.purchaseBillRepository.getTotalPurchaseCost(month);
   }
+
   getNearestPayments(numberOfpayments?: number) {
     return this.purchaseBillRepository.getNearestPayments(numberOfpayments);
   }

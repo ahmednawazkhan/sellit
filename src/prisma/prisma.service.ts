@@ -9,6 +9,7 @@ export class PrismaService
   constructor() {
     super();
   }
+
   async onModuleInit() {
     // optional and better for performance, because of prisma client lazy connect behavior
     // https://github.com/fivethree-team/nestjs-prisma-starter/issues/438

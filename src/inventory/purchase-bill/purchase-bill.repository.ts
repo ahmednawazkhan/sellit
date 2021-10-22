@@ -119,6 +119,7 @@ export class PurchaseBillRepository {
       })
     )._sum;
   }
+
   async getTotalPurchaseCost(month: number) {
     const date = new Date();
     if (month === 0 || month === -1) {

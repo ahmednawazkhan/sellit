@@ -112,6 +112,7 @@ export class TireInventoryController {
   totalQuantityItemFile(@Param('id') itemFileId: string) {
     return this.tireInventoryService.totalQuantityItemFile(itemFileId);
   }
+
   @ApiOkResponse({
     type: TireInventory,
     description: 'get the purchase bill  for a tire inventory id',
@@ -120,6 +121,7 @@ export class TireInventoryController {
   async getPurchaseBill(@Param('id') id: string) {
     return this.tireInventoryService.getPurchaseBill(id);
   }
+
   @ApiOkResponse({
     type: TireInventory,
     description: 'get the vendor from which a given tire was bought',

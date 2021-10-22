@@ -30,6 +30,7 @@ export class ItemFileService {
   removeAll() {
     return this.itemFileRepository.removeAll();
   }
+
   getTireInventory(id: string) {
     return this.itemFileRepository.getTireInventory(id);
   }

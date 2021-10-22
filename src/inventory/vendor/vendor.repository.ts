@@ -58,6 +58,7 @@ export class VendorRepository {
   removeAll() {
     return this.prisma.vendor.deleteMany();
   }
+
   async getAllPurchaseBills(id: string) {
     return (
       await this.prisma.vendor

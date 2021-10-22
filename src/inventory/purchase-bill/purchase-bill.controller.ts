@@ -99,6 +99,7 @@ export class PurchaseBillController {
   findOne(@Param('id') id: string) {
     return this.purchaseBillService.findOne(id);
   }
+
   @ApiOkResponse({
     type: PurchaseBill,
     description: 'update Purchase bill by given id',
@@ -128,6 +129,7 @@ export class PurchaseBillController {
   getTireInventory(@Param('id') id: string) {
     return this.purchaseBillService.getTireInventory(id);
   }
+
   @ApiOkResponse({
     type: PurchaseBill,
     description: 'get remaining tires given purchase bill id',

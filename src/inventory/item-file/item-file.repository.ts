@@ -67,6 +67,7 @@ export class ItemFileRepository {
   removeAll() {
     return this.prisma.tireItemFile.deleteMany();
   }
+
   async getTireInventory(id: string) {
     return (
       await this.prisma.tireItemFile
