@@ -8,5 +8,15 @@
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
-  }
+  },
+  "collectCoverageFrom": [
+    "<rootDir>/src/**/*.(t|j)s",
+    "!<rootDir>/src/resolvers/**/*.(t|j)s",
+    "!<rootDir>/src/services/**/*.(t|j)s",
+    "!<rootDir>/src/models/**/*.(t|j)s",
+    "!<rootDir>/src/decorators/**/*.(t|j)s",
+    "!<rootDir>/src/common/**/*.(t|j)s",
+    "!<rootDir>/src/guards/**/*.(t|j)s"
+  ]
+  
 }
