@@ -16,7 +16,7 @@ describe('Vendor (e2e)', () => {
   let vendorService: VendorService;
   let purchaseBillService: PurchaseBillService;
   // TODO: see if route can come from Reflection
-  let basePath = '/vendor';
+  const basePath = '/vendor';
   let defaultVendor: Vendor;
   let defaultVendorClone;
 

@@ -1,4 +1,9 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateItemFileDto } from './dto/create-item-file.dto';
@@ -6,7 +11,7 @@ import { UpdateItemFileDto } from './dto/update-item-file.dto';
 
 @Injectable()
 export class ItemFileRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   create(createItemFileDto: CreateItemFileDto) {
     return this.prisma.tireItemFile
@@ -35,16 +40,18 @@ export class ItemFileRepository {
   }
 
   update(id: string, updateItemFileDto: UpdateItemFileDto) {
-    return this.prisma.tireItemFile.update({
-      where: {
-        id,
-      },
-      data: {
-        ...updateItemFileDto,
-      },
-    }).catch((e) => {
-      throw new BadRequestException(e.message);
-    });;
+    return this.prisma.tireItemFile
+      .update({
+        where: {
+          id,
+        },
+        data: {
+          ...updateItemFileDto,
+        },
+      })
+      .catch((e) => {
+        throw new BadRequestException(e.message);
+      });
   }
 
   remove(id: string) {
@@ -54,23 +61,28 @@ export class ItemFileRepository {
           id,
         },
       })
-      .catch((_) => { });
+      .catch(() => null);
   }
 
   removeAll() {
     return this.prisma.tireItemFile.deleteMany();
   }
+
   async getTireInventory(id: string) {
-    return (await this.prisma.tireItemFile.findUnique({
-      where: {
-        id
-      },
-      rejectOnNotFound: true,
-      select: {
-        tires: true,
-      },
-    }).catch((e) => {
-      throw new NotFoundException(e.message);
-    })).tires;
+    return (
+      await this.prisma.tireItemFile
+        .findUnique({
+          where: {
+            id,
+          },
+          rejectOnNotFound: true,
+          select: {
+            tires: true,
+          },
+        })
+        .catch((e) => {
+          throw new NotFoundException(e.message);
+        })
+    ).tires;
   }
 }

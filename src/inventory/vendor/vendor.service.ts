@@ -5,7 +5,7 @@ import { VendorRepository } from './vendor.repository';
 
 @Injectable()
 export class VendorService {
-  constructor(private readonly vendorRepository: VendorRepository) { }
+  constructor(private readonly vendorRepository: VendorRepository) {}
 
   create(createVendorDto: CreateVendorDto) {
     return this.vendorRepository.create(createVendorDto);
@@ -30,7 +30,8 @@ export class VendorService {
   removeAll() {
     return this.vendorRepository.removeAll();
   }
-  getPurchaseBills(id: string) {
+
+  getPurchaseBillsByVendorId(id: string) {
     return this.vendorRepository.getAllPurchaseBills(id);
   }
 }

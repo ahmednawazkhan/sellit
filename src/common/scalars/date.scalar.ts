@@ -1,4 +1,3 @@
-
 export class DateScalar {
   description = 'Date custom scalar type';
 

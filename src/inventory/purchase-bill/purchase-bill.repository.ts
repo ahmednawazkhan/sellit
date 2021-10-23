@@ -1,20 +1,25 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { PurchaseBill } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreatePurchaseBillDto } from './dto/create-purchase-bill.dto';
 import { UpdatePurchaseBillDto } from './dto/update-purchase-bill.dto';
 
-
 @Injectable()
 export class PurchaseBillRepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   create(createPurchaseBillDto: CreatePurchaseBillDto) {
-    return this.prisma.purchaseBill.create({
-      data: createPurchaseBillDto
-    }
-    ).catch((e) => {
-      throw new BadRequestException(e.message);
-    });
+    return this.prisma.purchaseBill
+      .create({
+        data: createPurchaseBillDto,
+      })
+      .catch((e) => {
+        throw new BadRequestException(e.message);
+      });
   }
 
   findAll() {
@@ -33,16 +38,18 @@ export class PurchaseBillRepository {
   }
 
   update(id: string, updatePurchaseBillDto: UpdatePurchaseBillDto) {
-    return this.prisma.purchaseBill.update({
-      where: {
-        id,
-      },
-      data: {
-        ...updatePurchaseBillDto,
-      },
-    }).catch((e) => {
-      throw new BadRequestException(e.message);
-    });
+    return this.prisma.purchaseBill
+      .update({
+        where: {
+          id,
+        },
+        data: {
+          ...updatePurchaseBillDto,
+        },
+      })
+      .catch((e) => {
+        throw new BadRequestException(e.message);
+      });
   }
 
   remove(id: string) {
@@ -52,79 +59,111 @@ export class PurchaseBillRepository {
           id,
         },
       })
-      .catch((_) => { });
+      .catch(() => null);
   }
 
   removeAll() {
     return this.prisma.purchaseBill.deleteMany();
   }
-  getNotPaid() {
-    return this.prisma.$queryRaw(
-      'SELECT * FROM "PurchaseBill" WHERE "totalCost" != "costPaid";'
-    );
+
+  getUnPaidBills() {
+    return this.prisma.$queryRaw<
+      PurchaseBill[]
+    >`SELECT * FROM "PurchaseBill" WHERE "totalCost" != "costPaid";`;
   }
+
   async getTireInvetory(id: string) {
-    return (await this.prisma.purchaseBill.findUnique({
-      where: {
-        id,
-      },
-      rejectOnNotFound: true,
-      select: {
-        tireInventoryItems: true,
-      },
-    }).catch((e) => {
-      throw new NotFoundException(e.message);
-    })).tireInventoryItems;
+    return (
+      await this.prisma.purchaseBill
+        .findUnique({
+          where: {
+            id,
+          },
+          rejectOnNotFound: true,
+          select: {
+            tireInventoryItems: true,
+          },
+        })
+        .catch((e) => {
+          throw new NotFoundException(e.message);
+        })
+    ).tireInventoryItems;
   }
 
   async getTotalTires(month: number) {
-    let date = new Date();
+    const date = new Date();
     if (month == 0) {
-      return (await this.prisma.purchaseBill.aggregate({
+      return (
+        await this.prisma.purchaseBill.aggregate({
+          _sum: {
+            tireQuantity: true,
+          },
+        })
+      )._sum;
+    }
+    return (
+      await this.prisma.purchaseBill.aggregate({
         _sum: {
           tireQuantity: true,
         },
-      }))._sum;
-    }
-    return (await this.prisma.purchaseBill.aggregate({
-      _sum: {
-        tireQuantity: true,
-      },
-      where: {
-        createdAt: {
-          gte: new Date(date.getFullYear(), date.getMonth() - month, date.getDate()),
-          lte: date
-        },
-      },
-    }))._sum;
-
-
-  }
-  async getTotalPurchaseCost(month: number) {
-    let date = new Date();
-    if (month == 0) {
-      return (await this.prisma.purchaseBill.aggregate({
-        _sum: {
-          totalCost: true,
-        },
-      }))._sum;
-    }
-    else {
-      return (await this.prisma.purchaseBill.aggregate({
-        _sum: {
-          totalCost: true,
-        },
         where: {
           createdAt: {
-            gte: new Date(date.getFullYear(), date.getMonth() - month, date.getDate()),
-            lte: date
+            gte: new Date(
+              date.getFullYear(),
+              date.getMonth() - month,
+              date.getDate()
+            ),
+            lte: date,
           },
         },
-      }))._sum
-    };
+      })
+    )._sum;
   }
 
-  getNearestPayments() {
-    return this.prisma.$queryRaw('SELECT * FROM blog."PurchaseBill" WHERE "totalCost" > "costPaid" ORDER BY "nextPaymentDate" ASC LIMIT 3;');
+  async getTotalPurchaseCost(month: number) {
+    const date = new Date();
+    if (month === 0 || month === -1) {
+      return (
+        await this.prisma.purchaseBill.aggregate({
+          _sum: {
+            totalCost: true,
+          },
+        })
+      )._sum;
+    } else {
+      return (
+        await this.prisma.purchaseBill.aggregate({
+          _sum: {
+            totalCost: true,
+          },
+          where: {
+            createdAt: {
+              gte: new Date(
+                date.getFullYear(),
+                date.getMonth() - month,
+                date.getDate()
+              ),
+              lte: date,
+            },
+          },
+        })
+      )._sum;
+    }
+  }
+
+  async getNearestPayments(limit = 3) {
+    // return this.prisma.$queryRaw<PurchaseBill[]>(
+    //   `SELECT * FROM blog."PurchaseBill" WHERE "totalCost" > "costPaid" ORDER BY "nextPaymentDate" ASC LIMIT ${limit};`
+    // );
+
+    const allBills = await this.prisma.purchaseBill.findMany({
+      orderBy: {
+        nextPaymentDate: 'asc',
+      },
+    });
+
+    return allBills
+      .filter((bill) => bill.totalCost > bill.costPaid)
+      .slice(0, limit);
   }
 }

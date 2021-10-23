@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CreatePurchaseBillDto } from './dto/create-purchase-bill.dto';
 import { UpdatePurchaseBillDto } from './dto/update-purchase-bill.dto';
@@ -8,7 +17,7 @@ import { PurchaseBillService } from './purchase-bill.service';
 @ApiTags('Purchase Bill')
 @Controller('purchase-bill')
 export class PurchaseBillController {
-  constructor(private readonly purchaseBillService: PurchaseBillService) { }
+  constructor(private readonly purchaseBillService: PurchaseBillService) {}
 
   @ApiOkResponse({
     type: PurchaseBill,
@@ -29,39 +38,57 @@ export class PurchaseBillController {
   }
 
   @ApiOkResponse({
+    isArray: true,
     type: PurchaseBill,
     description: 'get three nearest purchase bill payments',
   })
   @Get('/payments')
-  getNearestPayments() {
-    return this.purchaseBillService.getNearestPayments();
+  getNearestPayments(@Query('numberOfBills') numberOfBills?: number) {
+    return this.purchaseBillService.getNearestPayments(numberOfBills);
   }
 
   @ApiOkResponse({
-    type: PurchaseBill,
-    description: 'get the total tires till given month (0: all time , 1: 1 month back, 6: six months back)',
+    schema: {
+      type: 'object',
+      properties: {
+        totalCost: {
+          type: 'number',
+        },
+      },
+    },
+    description:
+      'get the total purchase cost till given month (0 or -1: all time , 1: 1 month back, 6: six months back)',
   })
   @Get('/total-cost')
-  getTotalPurchaseCost(@Query('month') month: number) {
-    return this.purchaseBillService.getTotalCost(month);
+  getTotalPurchaseCost(@Query('months') months: number) {
+    return this.purchaseBillService.getTotalCost(months);
   }
 
   @ApiOkResponse({
-    type: PurchaseBill,
-    description: 'get the total purchase cost till given month (0: all time , 1: 1 month back, 6: six months back)',
+    schema: {
+      type: 'object',
+      properties: {
+        tireQuantity: {
+          type: 'number',
+        },
+      },
+    },
+    description:
+      'get the total tires till given month (0 or -1: all time , 1: 1 month back, 6: six months back)',
   })
   @Get('/total-tires')
-  getTotalTiresBought(@Query('month') month: number) {
-    return this.purchaseBillService.getTotalTires(month);
+  getTotalTiresBought(@Query('months') months: number) {
+    return this.purchaseBillService.getTotalTires(months);
   }
 
   @ApiOkResponse({
+    isArray: true,
     type: PurchaseBill,
-    description: 'get all the not paid purchase bills',
+    description: 'get all purchase bills that are not fully paid',
   })
-  @Get('/not-paid')
+  @Get('/un-paid')
   getAllPaid() {
-    return this.purchaseBillService.getNotPaid();
+    return this.purchaseBillService.getUnPaidBills();
   }
 
   @ApiOkResponse({
@@ -72,12 +99,16 @@ export class PurchaseBillController {
   findOne(@Param('id') id: string) {
     return this.purchaseBillService.findOne(id);
   }
+
   @ApiOkResponse({
     type: PurchaseBill,
     description: 'update Purchase bill by given id',
   })
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePurchaseBillDto: UpdatePurchaseBillDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePurchaseBillDto: UpdatePurchaseBillDto
+  ) {
     return this.purchaseBillService.update(id, updatePurchaseBillDto);
   }
 
@@ -98,6 +129,7 @@ export class PurchaseBillController {
   getTireInventory(@Param('id') id: string) {
     return this.purchaseBillService.getTireInventory(id);
   }
+
   @ApiOkResponse({
     type: PurchaseBill,
     description: 'get remaining tires given purchase bill id',
@@ -106,7 +138,4 @@ export class PurchaseBillController {
   getRemainingTires(@Param('id') id: string) {
     return this.purchaseBillService.getRemainingTires(id);
   }
-
-
-
 }

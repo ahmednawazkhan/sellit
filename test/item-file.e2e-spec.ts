@@ -23,7 +23,7 @@ describe('Tire Item File (e2e)', () => {
   let tireInventoryService: TireInventoryService;
 
   // TODO: see if route can come from Reflection
-  let basePath = '/item-file';
+  const basePath = '/item-file';
   let defaultTireItemFile: TireItemFile;
   let defaultTireItemFileClone;
 

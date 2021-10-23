@@ -3,7 +3,6 @@ import { VendorType } from '@prisma/client';
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateVendorDto {
-
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -16,5 +15,4 @@ export class CreateVendorDto {
   @IsEnum(VendorType)
   @ApiProperty({ enum: VendorType })
   type: VendorType;
-
 }

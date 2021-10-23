@@ -2,9 +2,10 @@ import {
   Body,
   Controller,
   Delete,
-  Get, Param,
+  Get,
+  Param,
   Patch,
-  Post
+  Post,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { CreateVendorDto } from './dto/create-vendor.dto';
@@ -15,7 +16,7 @@ import { VendorService } from './vendor.service';
 @ApiTags('Vendor')
 @Controller('vendor')
 export class VendorController {
-  constructor(private readonly vendorService: VendorService) { }
+  constructor(private readonly vendorService: VendorService) {}
 
   @ApiOkResponse({
     type: Vendor,
@@ -62,12 +63,13 @@ export class VendorController {
   remove(@Param('id') id: string) {
     return this.vendorService.remove(id);
   }
+
   @ApiOkResponse({
     type: Vendor,
-    description: 'get purchase bill by given vendor id',
+    description: 'get all purchase bills by vendor id',
   })
-  @Get('/purchase-bills/:id')
-  getPurchaseBills(@Param('id') id: string) {
-    return this.vendorService.getPurchaseBills(id);
+  @Get('/:id/purchase-bills')
+  getPurchaseBills(@Param('id') vendorId: string) {
+    return this.vendorService.getPurchaseBillsByVendorId(vendorId);
   }
 }

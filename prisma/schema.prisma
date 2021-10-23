@@ -76,6 +76,8 @@ model Vendor {
   purchaseBills PurchaseBill[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+
+  @@unique([name, type], name: "vendor_unique_name_and_type")
 }
 
 model TireInventory {

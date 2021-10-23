@@ -6,9 +6,13 @@ import { PurchaseBillRepository } from './purchase-bill.repository';
 
 @Injectable()
 export class PurchaseBillService {
-  constructor(private readonly purchaseBillRepository: PurchaseBillRepository, private readonly tireInventoryRepository: TireInventoryRepository) { }
+  constructor(
+    private readonly purchaseBillRepository: PurchaseBillRepository,
+    private readonly tireInventoryRepository: TireInventoryRepository
+  ) {}
 
   create(createPurchaseBillDto: CreatePurchaseBillDto) {
+    // FIXME: total cost should not exceed cost paid
     return this.purchaseBillRepository.create(createPurchaseBillDto);
   }
 
@@ -21,37 +25,44 @@ export class PurchaseBillService {
   }
 
   update(id: string, updatePurchaseBillDto: UpdatePurchaseBillDto) {
+    // FIXME: total cost should not exceed cost paid
     return this.purchaseBillRepository.update(id, updatePurchaseBillDto);
   }
 
   remove(id: string) {
     return this.purchaseBillRepository.remove(id);
   }
+
   removeAll() {
     return this.purchaseBillRepository.removeAll();
   }
-  getNotPaid() {
-    return this.purchaseBillRepository.getNotPaid();
+
+  getUnPaidBills() {
+    return this.purchaseBillRepository.getUnPaidBills();
   }
+
   getTireInventory(id: string) {
     return this.purchaseBillRepository.getTireInvetory(id);
   }
 
   async getRemainingTires(id: string) {
-    const tireQuantity = (await this.tireInventoryRepository.countQuantity(id))._sum.quantity;
-    const totalQuantity = (await this.purchaseBillRepository.findOne(id)).tireQuantity;
+    const tireQuantity = (await this.tireInventoryRepository.countQuantity(id))
+      .quantity;
+    const totalQuantity = (await this.purchaseBillRepository.findOne(id))
+      .tireQuantity;
 
-    return (totalQuantity - tireQuantity);
+    return totalQuantity - tireQuantity;
   }
 
   getTotalTires(month: number) {
-    return this.purchaseBillRepository.getTotalTires(month)
+    return this.purchaseBillRepository.getTotalTires(month);
   }
 
   getTotalCost(month: number) {
     return this.purchaseBillRepository.getTotalPurchaseCost(month);
   }
-  getNearestPayments() {
-    return this.purchaseBillRepository.getNearestPayments();
+
+  getNearestPayments(numberOfpayments?: number) {
+    return this.purchaseBillRepository.getNearestPayments(numberOfpayments);
   }
 }
