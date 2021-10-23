@@ -1,19 +1,19 @@
-import { INestApplication } from "@nestjs/common";
-import { Test, TestingModule } from "@nestjs/testing";
-import { Vendor } from "@prisma/client";
-import { AppModule } from "src/app.module";
-import { ItemFileService } from "src/inventory/item-file/item-file.service";
-import { CreatePurchaseBillDto } from "src/inventory/purchase-bill/dto/create-purchase-bill.dto";
-import { UpdatePurchaseBillDto } from "src/inventory/purchase-bill/dto/update-purchase-bill.dto";
-import { PurchaseBill } from "src/inventory/purchase-bill/entities/purchase-bill.entity";
-import { PurchaseBillService } from "src/inventory/purchase-bill/purchase-bill.service";
-import { TireInventoryService } from "src/inventory/tire-inventory/tire-inventory.service";
-import { VendorService } from "src/inventory/vendor/vendor.service";
+import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { Vendor } from '@prisma/client';
+import { AppModule } from 'src/app.module';
+import { ItemFileService } from 'src/inventory/item-file/item-file.service';
+import { CreatePurchaseBillDto } from 'src/inventory/purchase-bill/dto/create-purchase-bill.dto';
+import { UpdatePurchaseBillDto } from 'src/inventory/purchase-bill/dto/update-purchase-bill.dto';
+import { PurchaseBill } from 'src/inventory/purchase-bill/entities/purchase-bill.entity';
+import { PurchaseBillService } from 'src/inventory/purchase-bill/purchase-bill.service';
+import { TireInventoryService } from 'src/inventory/tire-inventory/tire-inventory.service';
+import { VendorService } from 'src/inventory/vendor/vendor.service';
 import request from 'supertest';
-import { createPurchaseBillMock } from "__mocks__/purchase-bill.mock";
-import { createTireInventoryMock } from "__mocks__/tire-inventory.mock";
-import { createTireItemFileMock } from "__mocks__/tire-item-file.mock";
-import { createVendorMock } from "__mocks__/vendor.mock";
+import { createPurchaseBillMock } from '__mocks__/purchase-bill.mock';
+import { createTireInventoryMock } from '__mocks__/tire-inventory.mock';
+import { createTireItemFileMock } from '__mocks__/tire-item-file.mock';
+import { createVendorMock } from '__mocks__/vendor.mock';
 
 describe('Purchase Bill (e2e)', () => {
   let app: INestApplication;
@@ -22,13 +22,11 @@ describe('Purchase Bill (e2e)', () => {
   let tireItemFileService: ItemFileService;
   let tireInventoryService: TireInventoryService;
 
-
   // TODO: see if route can come from Reflection
-  let basePath = '/purchase-bill';
+  const basePath = '/purchase-bill';
   let defaultPurchaseBill: PurchaseBill;
   let defaultPurchaseBillClone;
   let defaultVendor: Vendor;
-
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -42,14 +40,15 @@ describe('Purchase Bill (e2e)', () => {
     purchaseBillService = app.get(PurchaseBillService);
     tireInventoryService = app.get(TireInventoryService);
     tireItemFileService = app.get(ItemFileService);
-
   });
 
   beforeEach(async () => {
     await vendorService.removeAll();
     defaultVendor = await vendorService.create(createVendorMock);
-    createPurchaseBillMock.vendor_id = defaultVendor.id
-    defaultPurchaseBill = await purchaseBillService.create(createPurchaseBillMock);
+    createPurchaseBillMock.vendor_id = defaultVendor.id;
+    defaultPurchaseBill = await purchaseBillService.create(
+      createPurchaseBillMock
+    );
     defaultPurchaseBillClone = {
       ...defaultPurchaseBill,
       createdAt: defaultPurchaseBill.createdAt.toISOString(),
@@ -60,12 +59,11 @@ describe('Purchase Bill (e2e)', () => {
   afterEach(async () => {
     await tireInventoryService.removeAll();
     await purchaseBillService.removeAll();
-    await vendorService.removeAll()
+    await vendorService.removeAll();
     await tireItemFileService.removeAll();
   });
 
   afterAll(async () => {
-
     await app.close();
   });
 
@@ -81,28 +79,28 @@ describe('Purchase Bill (e2e)', () => {
   });
 
   it('should return the total cost of purchase bills in a given month (GET)', () => {
-    const month = 0
+    const month = 0;
     return request(app.getHttpServer())
       .get(`${basePath}/total-cost?month=${month}`)
       .expect(200)
       .expect(({ body }) => {
-        expect(body).toHaveProperty('totalCost')
+        expect(body).toHaveProperty('totalCost');
         expect(body).toEqual({
           totalCost: defaultPurchaseBill.totalCost,
-        })
+        });
       });
   });
 
   it('should return the total tires of purchase bills in a given month (GET)', () => {
-    const month = 0
+    const month = 0;
     return request(app.getHttpServer())
       .get(`${basePath}/total-tires?month=${month}`)
       .expect(200)
       .expect(({ body }) => {
-        expect(body).toHaveProperty('tireQuantity')
+        expect(body).toHaveProperty('tireQuantity');
         expect(body).toEqual({
           tireQuantity: defaultPurchaseBill.tireQuantity,
-        })
+        });
       });
   });
 
@@ -128,7 +126,6 @@ describe('Purchase Bill (e2e)', () => {
       });
   });
 
-
   it('should return purchase bill with provided id (GET)', () => {
     return request(app.getHttpServer())
       .get(`${basePath}/${defaultPurchaseBill.id}`)
@@ -138,14 +135,15 @@ describe('Purchase Bill (e2e)', () => {
       });
   });
 
-
   it('should return the all remaining tires by given purchase id  (GET)', async () => {
     const tireItem = await tireItemFileService.create(createTireItemFileMock);
     createTireInventoryMock.itemFileId = tireItem.id;
     createTireInventoryMock.purchaseId = defaultPurchaseBill.id;
     await tireInventoryService.create(createTireInventoryMock);
 
-    const rem = await purchaseBillService.getRemainingTires(defaultPurchaseBill.id);
+    const rem = await purchaseBillService.getRemainingTires(
+      defaultPurchaseBill.id
+    );
 
     return request(app.getHttpServer())
       .get(`${basePath}/remaining/${defaultPurchaseBill.id}`)
@@ -169,13 +167,15 @@ describe('Purchase Bill (e2e)', () => {
     const tireItem = await tireItemFileService.create(createTireItemFileMock);
     createTireInventoryMock.itemFileId = tireItem.id;
     createTireInventoryMock.purchaseId = defaultPurchaseBill.id;
-    const tireInventory = await tireInventoryService.create(createTireInventoryMock);
+    const tireInventory = await tireInventoryService.create(
+      createTireInventoryMock
+    );
     const tireInventoryClone = {
       ...tireInventory,
       dateOfManufacture: tireInventory.dateOfManufacture.toISOString(),
       createdAt: tireInventory.createdAt.toISOString(),
       updatedAt: tireInventory.updatedAt.toISOString(),
-    }
+    };
     return request(app.getHttpServer())
       .get(`${basePath}/tire-inventory/${defaultPurchaseBill.id}`)
       .expect(200)
@@ -185,8 +185,6 @@ describe('Purchase Bill (e2e)', () => {
         );
       });
   });
-
-
 
   it('should create purchase bill with provided data (POST)', async () => {
     const purchaseBillTwo: CreatePurchaseBillDto = {
@@ -205,13 +203,17 @@ describe('Purchase Bill (e2e)', () => {
         expect(body).toHaveProperty('updatedAt');
       });
 
-    const dbPurchaseTwo = await purchaseBillService.findOne(purchaseTwoResponse.id);
-    return expect(dbPurchaseTwo).toEqual(expect.objectContaining(purchaseBillTwo));
+    const dbPurchaseTwo = await purchaseBillService.findOne(
+      purchaseTwoResponse.id
+    );
+    return expect(dbPurchaseTwo).toEqual(
+      expect.objectContaining(purchaseBillTwo)
+    );
   });
 
   it('should update purchase bill against an id with provided data (PATCH)', async () => {
     const purchaseTwo: UpdatePurchaseBillDto = {
-      costPaid: 25000
+      costPaid: 25000,
     };
     await request(app.getHttpServer())
       .patch(`${basePath}/${defaultPurchaseBill.id}`)
@@ -221,12 +223,18 @@ describe('Purchase Bill (e2e)', () => {
         expect(body).toEqual(expect.objectContaining(purchaseTwo));
         expect(body).toHaveProperty('createdAt');
         expect(body).toHaveProperty('updatedAt');
-        expect(new Date(body.updatedAt) > defaultPurchaseBill.updatedAt).toBe(true);
+        expect(new Date(body.updatedAt) > defaultPurchaseBill.updatedAt).toBe(
+          true
+        );
       });
 
-    const dbDefaultPurchase = await purchaseBillService.findOne(defaultPurchaseBill.id);
+    const dbDefaultPurchase = await purchaseBillService.findOne(
+      defaultPurchaseBill.id
+    );
 
-    return expect(dbDefaultPurchase).toEqual(expect.objectContaining(purchaseTwo));
+    return expect(dbDefaultPurchase).toEqual(
+      expect.objectContaining(purchaseTwo)
+    );
   });
 
   it('should delete purchase bill against an id (DELETE)', async () => {
@@ -237,9 +245,9 @@ describe('Purchase Bill (e2e)', () => {
         expect(body).toStrictEqual(defaultPurchaseBillClone);
       });
 
-    return expect(purchaseBillService.findOne(defaultPurchaseBill.id)).rejects.toThrow(
-      'No PurchaseBill found'
-    );
+    return expect(
+      purchaseBillService.findOne(defaultPurchaseBill.id)
+    ).rejects.toThrow('No PurchaseBill found');
   });
 
   it('should return 200 when deleting purchaseBill that does not exist (DELETE)', async () => {
@@ -250,5 +258,4 @@ describe('Purchase Bill (e2e)', () => {
         expect(body).toEqual({});
       });
   });
-
 });

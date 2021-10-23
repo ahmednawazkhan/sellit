@@ -37,11 +37,9 @@ describe('Tire Item File (e2e)', () => {
     purchaseBillService = app.get(PurchaseBillService);
     vendorService = app.get(VendorService);
     tireInventoryService = app.get(TireInventoryService);
-
   });
 
   beforeEach(async () => {
-
     defaultTireItemFile = await tireItemFileService.create(
       createTireItemFileMock
     );
@@ -73,7 +71,6 @@ describe('Tire Item File (e2e)', () => {
         );
       });
   });
-
 
   it('should return item-file with provided id (GET)', () => {
     return request(app.getHttpServer())
@@ -117,7 +114,6 @@ describe('Tire Item File (e2e)', () => {
       expect.objectContaining(tireItemFileTwo)
     );
   });
-
 
   it('should return 409 when duplicate item-file data is provided (POST)', async () => {
     return request(app.getHttpServer())
@@ -180,19 +176,22 @@ describe('Tire Item File (e2e)', () => {
   });
 
   it('should return all the tire inventory from item-file id', async () => {
-
     const vendor = await vendorService.create(createVendorMock);
-    createPurchaseBillMock.vendor_id = vendor.id
-    const purchaseBill = await purchaseBillService.create(createPurchaseBillMock);
-    createTireInventoryMock.itemFileId = defaultTireItemFile.id
+    createPurchaseBillMock.vendor_id = vendor.id;
+    const purchaseBill = await purchaseBillService.create(
+      createPurchaseBillMock
+    );
+    createTireInventoryMock.itemFileId = defaultTireItemFile.id;
     createTireInventoryMock.purchaseId = purchaseBill.id;
-    const tireInventory = await tireInventoryService.create(createTireInventoryMock);
+    const tireInventory = await tireInventoryService.create(
+      createTireInventoryMock
+    );
     const tireInventoryClone = {
       ...tireInventory,
       dateOfManufacture: tireInventory.dateOfManufacture.toISOString(),
       createdAt: tireInventory.createdAt.toISOString(),
-      updatedAt: tireInventory.updatedAt.toISOString()
-    }
+      updatedAt: tireInventory.updatedAt.toISOString(),
+    };
     return request(app.getHttpServer())
       .get(`${basePath}/tire-inventory/${defaultTireItemFile.id}`)
       .expect(200)

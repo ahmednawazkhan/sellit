@@ -23,7 +23,7 @@ describe('Vendor (e2e)', () => {
   beforeAll(async () => {
     const NODE_ENV = process.env.NODE_ENV ? `.${process.env.NODE_ENV}` : '';
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule]
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -31,7 +31,6 @@ describe('Vendor (e2e)', () => {
 
     vendorService = app.get(VendorService);
     purchaseBillService = app.get(PurchaseBillService);
-
   });
 
   beforeEach(async () => {
@@ -46,7 +45,6 @@ describe('Vendor (e2e)', () => {
   afterEach(async () => {
     await purchaseBillService.removeAll();
     await vendorService.removeAll();
-
   });
 
   afterAll(async () => {
@@ -147,20 +145,19 @@ describe('Vendor (e2e)', () => {
   });
   it('should return purchase bill of a vendor with provided id (GET)', async () => {
     createPurchaseBillMock.vendor_id = defaultVendor.id;
-    const purchaseBill = await purchaseBillService.create(createPurchaseBillMock);
+    const purchaseBill = await purchaseBillService.create(
+      createPurchaseBillMock
+    );
     const purchaseBillClone = {
       ...purchaseBill,
       createdAt: purchaseBill.createdAt.toISOString(),
-      updatedAt: purchaseBill.updatedAt.toISOString()
-    }
+      updatedAt: purchaseBill.updatedAt.toISOString(),
+    };
     return request(app.getHttpServer())
       .get(`${basePath}/purchase-bills/${defaultVendor.id}`)
       .expect(200)
       .expect(({ body }) => {
-        expect(body).toStrictEqual(
-          expect.arrayContaining([purchaseBillClone])
-        );
+        expect(body).toStrictEqual(expect.arrayContaining([purchaseBillClone]));
       });
   });
-
 });
