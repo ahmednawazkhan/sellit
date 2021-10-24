@@ -1,4 +1,4 @@
-import { CreateTireInventoryDto } from "src/inventory/tire-inventory/dto/create-tire-inventory.dto";
+import { CreateTireInventoryDto } from 'src/inventory/tire-inventory/dto/create-tire-inventory.dto';
 
 export const createTireInventoryMock: CreateTireInventoryDto = {
   itemFileId: '',
@@ -8,4 +8,4 @@ export const createTireInventoryMock: CreateTireInventoryDto = {
   averageSellingPrice: 90,
   purchasePrice: 30,
   purchaseId: '',
-}
+};

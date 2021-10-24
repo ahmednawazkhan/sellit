@@ -16,5 +16,4 @@
     "!<rootDir>/src/common/**/*.(t|j)s",
     "!<rootDir>/src/guards/**/*.(t|j)s"
   ]
-  
 }

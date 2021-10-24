@@ -4,11 +4,8 @@ import { tireInventory } from './seed/inventory/tire';
 
 const prisma = new PrismaClient();
 async function main() {
+  // TODO: find if this is wokring / useful
   dotenv.config();
-  if (process.env.POSTGRES_DB === 'sellit_tests') {
-    console.log('Not Seeding in test')
-    return
-  }
   console.log('Seeding...');
 
   // This creates

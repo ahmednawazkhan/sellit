@@ -105,7 +105,7 @@ describe('Purchase Bill (e2e)', () => {
   });
 
   it('should return the purchase bills not paid (GET)', async () => {
-    const unPaidBills = await purchaseBillService.getNotPaid();
+    const unPaidBills = await purchaseBillService.getUnPaidBills();
 
     return request(app.getHttpServer())
       .get(`${basePath}/payments`)

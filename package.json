@@ -16,7 +16,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{src,apps,libs,test,__mocks__}/**/*.ts\" --fix",
     "migrate:dev": "prisma migrate dev --preview-feature",
     "migrate:dev:create": "prisma migrate dev --create-only --preview-feature",
     "migrate:reset": "prisma migrate reset --force --preview-feature",
