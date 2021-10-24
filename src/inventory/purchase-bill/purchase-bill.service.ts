@@ -54,8 +54,8 @@ export class PurchaseBillService {
     return totalQuantity - tireQuantity;
   }
 
-  getTotalTires(month: number) {
-    return this.purchaseBillRepository.getTotalTires(month);
+  getTotalTiresPurchasedInMonths(months: number) {
+    return this.purchaseBillRepository.getTotalTiresPurchasedInMonths(months);
   }
 
   getTotalCost(month: number) {

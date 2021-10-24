@@ -78,7 +78,20 @@ describe('Purchase Bill (e2e)', () => {
       });
   });
 
-  it('should return the total cost of purchase bills in a given month (GET)', () => {
+  it('should return the total cost of purchase bills in given number of past months (GET)', () => {
+    const months = 1;
+    return request(app.getHttpServer())
+      .get(`${basePath}/total-cost?months=${months}`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toHaveProperty('totalCost');
+        expect(body).toEqual({
+          totalCost: defaultPurchaseBill.totalCost,
+        });
+      });
+  });
+
+  it('should return the total cost of purchase bills for all time if query params are not given (GET)', () => {
     const month = 0;
     return request(app.getHttpServer())
       .get(`${basePath}/total-cost?month=${month}`)
@@ -91,10 +104,10 @@ describe('Purchase Bill (e2e)', () => {
       });
   });
 
-  it('should return the total tires of purchase bills in a given month (GET)', () => {
-    const month = 0;
+  it('should return the total tires of purchase bills in a given number of past months (GET)', async () => {
+    const months = 1;
     return request(app.getHttpServer())
-      .get(`${basePath}/total-tires?month=${month}`)
+      .get(`${basePath}/tires/purchased?months=${months}`)
       .expect(200)
       .expect(({ body }) => {
         expect(body).toHaveProperty('tireQuantity');
@@ -104,25 +117,46 @@ describe('Purchase Bill (e2e)', () => {
       });
   });
 
-  it('should return the purchase bills not paid (GET)', async () => {
-    const unPaidBills = await purchaseBillService.getUnPaidBills();
+  it('should return the total tires bought for all time if query params are not given (GET)', async () => {
+    const newBill = await purchaseBillService.create({
+      ...createPurchaseBillMock,
+      tireQuantity: 500,
+    });
 
     return request(app.getHttpServer())
-      .get(`${basePath}/payments`)
+      .get(`${basePath}/tires/purchased`)
       .expect(200)
       .expect(({ body }) => {
-        expect(body).toStrictEqual(unPaidBills);
+        expect(body).toHaveProperty('tireQuantity');
+        expect(body).toEqual({
+          tireQuantity: defaultPurchaseBill.tireQuantity + newBill.tireQuantity,
+        });
+      });
+  });
+
+  it('should return the unpaid purchase bills (GET)', async () => {
+    // this bill should not be returned since it is fully paid
+    await purchaseBillService.create({
+      ...createPurchaseBillMock,
+      totalCost: 30000,
+      costPaid: 30000,
+    });
+    return request(app.getHttpServer())
+      .get(`${basePath}/un-paid`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toStrictEqual([defaultPurchaseBillClone]);
       });
   });
 
   it('should return the all nearest purchase payments (GET)', async () => {
-    const nearestBills = await purchaseBillService.getNearestPayments();
+    // TODO: fix result to return payments instead of bills
 
     return request(app.getHttpServer())
       .get(`${basePath}/payments`)
       .expect(200)
       .expect(({ body }) => {
-        expect(body).toStrictEqual(nearestBills);
+        expect(body).toStrictEqual([defaultPurchaseBillClone]);
       });
   });
 

@@ -76,9 +76,9 @@ export class PurchaseBillController {
     description:
       'get the total tires till given month (0 or -1: all time , 1: 1 month back, 6: six months back)',
   })
-  @Get('/total-tires')
+  @Get('/tires/purchased') //TODO: move to tire inventory
   getTotalTiresBought(@Query('months') months: number) {
-    return this.purchaseBillService.getTotalTires(months);
+    return this.purchaseBillService.getTotalTiresPurchasedInMonths(months);
   }
 
   @ApiOkResponse({
