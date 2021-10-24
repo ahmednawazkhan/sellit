@@ -51,6 +51,7 @@ describe('Purchase Bill (e2e)', () => {
     );
     defaultPurchaseBillClone = {
       ...defaultPurchaseBill,
+      billDate: defaultPurchaseBill.billDate.toISOString(),
       createdAt: defaultPurchaseBill.createdAt.toISOString(),
       updatedAt: defaultPurchaseBill.updatedAt.toISOString(),
     };
@@ -78,8 +79,13 @@ describe('Purchase Bill (e2e)', () => {
       });
   });
 
-  it('should return the total cost of purchase bills in given number of past months (GET)', () => {
+  it('should return the total cost of purchase bills in given number of past months (GET)', async () => {
     const months = 1;
+    await purchaseBillService.create({
+      ...createPurchaseBillMock,
+      billDate: new Date('1-1-2020'),
+      totalCost: 50000, // this cost should not be included
+    });
     return request(app.getHttpServer())
       .get(`${basePath}/total-cost?months=${months}`)
       .expect(200)
@@ -91,7 +97,11 @@ describe('Purchase Bill (e2e)', () => {
       });
   });
 
-  it('should return the total cost of purchase bills for all time if query params are not given (GET)', () => {
+  it('should return the total cost of purchase bills for all time if query params are not given (GET)', async () => {
+    const newBill = await purchaseBillService.create({
+      ...createPurchaseBillMock,
+      totalCost: 50000, // this cost should be included in total cost
+    });
     const month = 0;
     return request(app.getHttpServer())
       .get(`${basePath}/total-cost?month=${month}`)
@@ -99,7 +109,7 @@ describe('Purchase Bill (e2e)', () => {
       .expect(({ body }) => {
         expect(body).toHaveProperty('totalCost');
         expect(body).toEqual({
-          totalCost: defaultPurchaseBill.totalCost,
+          totalCost: defaultPurchaseBill.totalCost + newBill.totalCost,
         });
       });
   });

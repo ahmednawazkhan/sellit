@@ -73,6 +73,7 @@ export class PurchaseBillRepository {
     >`SELECT * FROM "PurchaseBill" WHERE "totalCost" != "costPaid";`.then(
       (bills) => {
         return bills.map((bill) => {
+          bill.billDate = new Date(bill.billDate);
           bill.createdAt = new Date(bill.createdAt);
           bill.updatedAt = new Date(bill.updatedAt);
           return bill;
@@ -116,7 +117,7 @@ export class PurchaseBillRepository {
           tireQuantity: true,
         },
         where: {
-          createdAt: {
+          billDate: {
             gte: new Date(
               date.getFullYear(),
               date.getMonth() - month,
@@ -146,7 +147,7 @@ export class PurchaseBillRepository {
             totalCost: true,
           },
           where: {
-            createdAt: {
+            billDate: {
               gte: new Date(
                 date.getFullYear(),
                 date.getMonth() - month,

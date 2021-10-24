@@ -30,6 +30,10 @@ export class CreatePurchaseBillDto {
   nextPaymentDate?: Date;
 
   @ApiProperty()
+  @IsDateString({ strict: true })
+  billDate?: Date;
+
+  @ApiProperty()
   @IsNumber()
   nextPaymentAmount?: number;
 }

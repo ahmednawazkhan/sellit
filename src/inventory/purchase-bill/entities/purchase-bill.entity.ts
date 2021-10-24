@@ -23,6 +23,9 @@ export class PurchaseBill {
   nextPaymentDate?: Date;
 
   @ApiProperty({ nullable: true })
+  billDate?: Date;
+
+  @ApiProperty({ nullable: true })
   nextPaymentAmount?: number;
 
   createdAt: Date;
