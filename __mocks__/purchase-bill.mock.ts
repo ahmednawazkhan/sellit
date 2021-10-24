@@ -5,5 +5,5 @@ export const createPurchaseBillMock: CreatePurchaseBillDto = {
   advancePaid: 4000,
   tireQuantity: 200,
   costPaid: 20000,
-  vendor_id: '',
+  vendorId: '',
 };

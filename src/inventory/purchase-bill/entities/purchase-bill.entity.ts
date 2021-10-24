@@ -17,7 +17,7 @@ export class PurchaseBill {
   costPaid: number;
 
   @ApiProperty()
-  vendor_id: string;
+  vendorId: string;
 
   @ApiProperty({ nullable: true })
   nextPaymentDate?: Date;

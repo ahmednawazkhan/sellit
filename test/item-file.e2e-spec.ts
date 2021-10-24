@@ -177,7 +177,7 @@ describe('Tire Item File (e2e)', () => {
 
   it('should return all the tire inventory from item-file id', async () => {
     const vendor = await vendorService.create(createVendorMock);
-    createPurchaseBillMock.vendor_id = vendor.id;
+    createPurchaseBillMock.vendorId = vendor.id;
     const purchaseBill = await purchaseBillService.create(
       createPurchaseBillMock
     );

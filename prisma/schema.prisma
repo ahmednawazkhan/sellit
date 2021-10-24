@@ -59,8 +59,8 @@ model PurchaseBill {
   advancePaid        Int?
   tireQuantity       Int
   costPaid           Int
-  vendor             Vendor          @relation(fields: [vendor_id], references: [id])
-  vendor_id          String
+  vendor             Vendor          @relation(fields: [vendorId], references: [id])
+  vendorId           String
   tireInventoryItems TireInventory[]
   nextPaymentDate    DateTime?
   nextPaymentAmount  Int?

@@ -63,7 +63,7 @@ CREATE TABLE "PurchaseBill" (
     "advancePaid" INTEGER,
     "tireQuantity" INTEGER NOT NULL,
     "costPaid" INTEGER NOT NULL,
-    "vendor_id" TEXT NOT NULL,
+    "vendorId" TEXT NOT NULL,
     "nextPaymentDate" TIMESTAMP(3),
     "nextPaymentAmount" INTEGER,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -113,7 +113,7 @@ CREATE UNIQUE INDEX "itemFile_dateOfManufacture" ON "TireInventory"("itemFileId"
 ALTER TABLE "Post" ADD FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "PurchaseBill" ADD FOREIGN KEY ("vendor_id") REFERENCES "Vendor"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "PurchaseBill" ADD FOREIGN KEY ("vendorId") REFERENCES "Vendor"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "TireInventory" ADD FOREIGN KEY ("itemFileId") REFERENCES "TireItemFile"("id") ON DELETE CASCADE ON UPDATE CASCADE;

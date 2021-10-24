@@ -45,7 +45,7 @@ describe('Purchase Bill (e2e)', () => {
   beforeEach(async () => {
     await vendorService.removeAll();
     defaultVendor = await vendorService.create(createVendorMock);
-    createPurchaseBillMock.vendor_id = defaultVendor.id;
+    createPurchaseBillMock.vendorId = defaultVendor.id;
     defaultPurchaseBill = await purchaseBillService.create(
       createPurchaseBillMock
     );

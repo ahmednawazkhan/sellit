@@ -143,7 +143,7 @@ describe('Vendor (e2e)', () => {
       });
   });
   it('should return purchase bills of a vendor with provided id (GET)', async () => {
-    createPurchaseBillMock.vendor_id = defaultVendor.id;
+    createPurchaseBillMock.vendorId = defaultVendor.id;
     const purchaseBill = await purchaseBillService.create(
       createPurchaseBillMock
     );

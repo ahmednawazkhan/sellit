@@ -47,7 +47,7 @@ Table PurchaseBill {
   tireQuantity Int [not null]
   costPaid Int [not null]
   vendor Vendor [not null]
-  vendor_id String [not null]
+  vendorId String [not null]
   tireInventoryItems TireInventory [not null]
   nextPaymentDate DateTime
   nextPaymentAmount Int
@@ -124,7 +124,7 @@ Enum VendorType {
 
 Ref: Post.authorId > User.id
 
-Ref: PurchaseBill.vendor_id > Vendor.id
+Ref: PurchaseBill.vendorId > Vendor.id
 
 Ref: TireInventory.itemFileId > TireItemFile.id
 

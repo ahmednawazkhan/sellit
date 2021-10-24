@@ -60,7 +60,7 @@ describe('Tire Inventory (e2e)', () => {
 
     defaultVendor = await vendorService.create(createVendorMock);
     defaultItemFile = await tireItemFileService.create(createTireItemFileMock);
-    createPurchaseBillMock.vendor_id = defaultVendor.id;
+    createPurchaseBillMock.vendorId = defaultVendor.id;
     defaultPurchaseBill = await purchaseBillService.create(
       createPurchaseBillMock
     );
