@@ -33,6 +33,10 @@ export class PurchaseBillService {
     return this.purchaseBillRepository.remove(id);
   }
 
+  removeAll() {
+    return this.purchaseBillRepository.removeAll();
+  }
+
   getUnPaidBills() {
     return this.purchaseBillRepository.getUnPaidBills();
   }
@@ -50,8 +54,8 @@ export class PurchaseBillService {
     return totalQuantity - tireQuantity;
   }
 
-  getTotalTires(month: number) {
-    return this.purchaseBillRepository.getTotalTires(month);
+  getTotalTiresPurchasedInMonths(months: number) {
+    return this.purchaseBillRepository.getTotalTiresPurchasedInMonths(months);
   }
 
   getTotalCost(month: number) {

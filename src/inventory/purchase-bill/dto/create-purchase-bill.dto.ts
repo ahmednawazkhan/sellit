@@ -23,11 +23,15 @@ export class CreatePurchaseBillDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  vendor_id: string;
+  vendorId: string;
 
   @ApiProperty()
   @IsDateString({ strict: true })
   nextPaymentDate?: Date;
+
+  @ApiProperty()
+  @IsDateString({ strict: true })
+  billDate?: Date;
 
   @ApiProperty()
   @IsNumber()

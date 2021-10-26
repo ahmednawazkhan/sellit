@@ -1,8 +1,6 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
-  "modulePaths": [
-    "<rootDir>"
-  ],
+  "modulePaths": ["<rootDir>"],
   "rootDir": "../",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
@@ -18,5 +16,4 @@
     "!<rootDir>/src/common/**/*.(t|j)s",
     "!<rootDir>/src/guards/**/*.(t|j)s"
   ]
-  
 }

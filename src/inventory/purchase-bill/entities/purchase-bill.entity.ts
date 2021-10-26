@@ -17,10 +17,13 @@ export class PurchaseBill {
   costPaid: number;
 
   @ApiProperty()
-  vendor_id: string;
+  vendorId: string;
 
   @ApiProperty({ nullable: true })
   nextPaymentDate?: Date;
+
+  @ApiProperty({ nullable: true })
+  billDate?: Date;
 
   @ApiProperty({ nullable: true })
   nextPaymentAmount?: number;

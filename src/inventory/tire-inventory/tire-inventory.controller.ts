@@ -93,7 +93,7 @@ export class TireInventoryController {
     },
     description: 'get the total quantity of tires for a  given purchase id',
   })
-  @Get('/purchase-bill/:id/quantity')
+  @Get('/purchase-bill/:id/tire/quantity')
   totalQuantity(@Param('id') purchaseId: string) {
     return this.tireInventoryService.totalQuantity(purchaseId);
   }
@@ -108,7 +108,7 @@ export class TireInventoryController {
     },
     description: 'get the total quantity of tires for a  given itemfile id',
   })
-  @Get('/itemfile/:id/quantity')
+  @Get('/itemfile/:id/tire/quantity')
   totalQuantityItemFile(@Param('id') itemFileId: string) {
     return this.tireInventoryService.totalQuantityItemFile(itemFileId);
   }

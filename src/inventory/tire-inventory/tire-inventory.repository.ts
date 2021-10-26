@@ -12,17 +12,13 @@ export class TireInventoryRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   create(createTireInventoryDto: CreateTireInventoryDto) {
-    return this.prisma.tireInventory
-      .create({
-        data: createTireInventoryDto,
-      })
-      .catch((e) => {
-        throw new BadRequestException(e.message);
-      });
+    return this.prisma.tireInventory.create({
+      data: createTireInventoryDto,
+    });
   }
 
   findAll() {
-    this.prisma.tireInventory.findMany();
+    return this.prisma.tireInventory.findMany();
   }
 
   findOne(id: string) {

@@ -56,14 +56,15 @@ model TireItemFile {
 model PurchaseBill {
   id                 String          @id @default(cuid())
   totalCost          Int
-  advancePaid        Int?
+  advancePaid        Int? //TODO: remove these fields and add them to payments table
   tireQuantity       Int
   costPaid           Int
-  vendor             Vendor          @relation(fields: [vendor_id], references: [id])
-  vendor_id          String
+  vendor             Vendor          @relation(fields: [vendorId], references: [id])
+  vendorId           String
   tireInventoryItems TireInventory[]
   nextPaymentDate    DateTime?
   nextPaymentAmount  Int?
+  billDate           DateTime        @default(now())
   createdAt          DateTime        @default(now())
   updatedAt          DateTime        @updatedAt
 }

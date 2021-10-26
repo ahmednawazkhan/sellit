@@ -67,9 +67,19 @@ export class PurchaseBillRepository {
   }
 
   getUnPaidBills() {
+    // raw query returns timestamps without Z offset
     return this.prisma.$queryRaw<
       PurchaseBill[]
-    >`SELECT * FROM "PurchaseBill" WHERE "totalCost" != "costPaid";`;
+    >`SELECT * FROM "PurchaseBill" WHERE "totalCost" != "costPaid";`.then(
+      (bills) => {
+        return bills.map((bill) => {
+          bill.billDate = new Date(bill.billDate);
+          bill.createdAt = new Date(bill.createdAt);
+          bill.updatedAt = new Date(bill.updatedAt);
+          return bill;
+        });
+      }
+    );
   }
 
   async getTireInvetory(id: string) {
@@ -90,9 +100,9 @@ export class PurchaseBillRepository {
     ).tireInventoryItems;
   }
 
-  async getTotalTires(month: number) {
+  async getTotalTiresPurchasedInMonths(month = 0) {
     const date = new Date();
-    if (month == 0) {
+    if (month === 0 || month === -1) {
       return (
         await this.prisma.purchaseBill.aggregate({
           _sum: {
@@ -107,7 +117,7 @@ export class PurchaseBillRepository {
           tireQuantity: true,
         },
         where: {
-          createdAt: {
+          billDate: {
             gte: new Date(
               date.getFullYear(),
               date.getMonth() - month,
@@ -120,7 +130,7 @@ export class PurchaseBillRepository {
     )._sum;
   }
 
-  async getTotalPurchaseCost(month: number) {
+  async getTotalPurchaseCost(month = 0) {
     const date = new Date();
     if (month === 0 || month === -1) {
       return (
@@ -137,7 +147,7 @@ export class PurchaseBillRepository {
             totalCost: true,
           },
           where: {
-            createdAt: {
+            billDate: {
               gte: new Date(
                 date.getFullYear(),
                 date.getMonth() - month,

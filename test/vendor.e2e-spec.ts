@@ -1,17 +1,20 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { VendorType } from '@prisma/client';
+import { PurchaseBillService } from 'src/inventory/purchase-bill/purchase-bill.service';
 import { CreateVendorDto } from 'src/inventory/vendor/dto/create-vendor.dto';
 import { UpdateVendorDto } from 'src/inventory/vendor/dto/update-vendor.dto';
 import { Vendor } from 'src/inventory/vendor/entities/vendor.entity';
 import { VendorService } from 'src/inventory/vendor/vendor.service';
 import request from 'supertest';
+import { createPurchaseBillMock } from '__mocks__/purchase-bill.mock';
 import { createVendorMock } from '__mocks__/vendor.mock';
 import { AppModule } from '../src/app.module';
 
 describe('Vendor (e2e)', () => {
   let app: INestApplication;
   let vendorService: VendorService;
+  let purchaseBillService: PurchaseBillService;
   // TODO: see if route can come from Reflection
   const basePath = '/vendor';
   let defaultVendor: Vendor;
@@ -26,6 +29,7 @@ describe('Vendor (e2e)', () => {
     await app.init();
 
     vendorService = app.get(VendorService);
+    purchaseBillService = app.get(PurchaseBillService);
   });
 
   beforeEach(async () => {
@@ -38,6 +42,7 @@ describe('Vendor (e2e)', () => {
   });
 
   afterEach(async () => {
+    await purchaseBillService.removeAll();
     await vendorService.removeAll();
   });
 
@@ -135,6 +140,24 @@ describe('Vendor (e2e)', () => {
       .expect(200)
       .expect(({ body }) => {
         expect(body).toEqual({});
+      });
+  });
+  it('should return all purchase bills for a given vendor id (GET)', async () => {
+    createPurchaseBillMock.vendorId = defaultVendor.id;
+    const purchaseBill = await purchaseBillService.create(
+      createPurchaseBillMock
+    );
+    const purchaseBillClone = {
+      ...purchaseBill,
+      billDate: purchaseBill.billDate.toISOString(),
+      createdAt: purchaseBill.createdAt.toISOString(),
+      updatedAt: purchaseBill.updatedAt.toISOString(),
+    };
+    return request(app.getHttpServer())
+      .get(`${basePath}/${defaultVendor.id}/purchase-bills`)
+      .expect(200)
+      .expect(({ body }) => {
+        expect(body).toStrictEqual(expect.arrayContaining([purchaseBillClone]));
       });
   });
 });

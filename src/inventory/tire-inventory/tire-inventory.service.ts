@@ -39,6 +39,10 @@ export class TireInventoryService {
     return this.tireInventoryRepository.remove(id);
   }
 
+  removeAll() {
+    return this.tireInventoryRepository.removeAll();
+  }
+
   totalQuantity(purchaseId: string) {
     return this.tireInventoryRepository.countQuantity(purchaseId);
   }

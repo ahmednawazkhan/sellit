@@ -4,6 +4,7 @@ import { tireInventory } from './seed/inventory/tire';
 
 const prisma = new PrismaClient();
 async function main() {
+  // TODO: find if this is wokring / useful
   dotenv.config();
   console.log('Seeding...');
 
@@ -13,7 +14,7 @@ async function main() {
   // purchase bills
   // vendors
   for (const inventoryItem of tireInventory) {
-    await prisma.tireInventory.create(inventoryItem);
+    await prisma.tireInventory.create(inventoryItem).catch(console.log);
   }
 
   console.log('seeding complete...');
