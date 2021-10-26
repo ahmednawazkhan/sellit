@@ -1,4 +1,4 @@
-import { vendorData } from "./vendor";
+import { vendorData } from './vendor';
 
 export const purchaseBillData = [
   {
@@ -7,17 +7,17 @@ export const purchaseBillData = [
     tireQuantity: 200,
     costPaid: 20000,
     vendor: {
-      create: vendorData[2]
+      create: vendorData[2],
     },
     nextPaymentDate: new Date('2022-03-22'),
-    nextPaymentAmount: 20000
+    nextPaymentAmount: 20000,
   },
   {
     totalCost: 200000,
     tireQuantity: 3000,
     costPaid: 200000,
     vendor: {
-      create: vendorData[1]
+      create: vendorData[1],
     },
   },
   {
@@ -26,19 +26,17 @@ export const purchaseBillData = [
     tireQuantity: 2000,
     costPaid: 100000,
     vendor: {
-      create: vendorData[0]
+      create: vendorData[0],
     },
     nextPaymentDate: new Date('2021-11-02'),
-    nextPaymentAmount: 100000
+    nextPaymentAmount: 100000,
   },
   {
     totalCost: 175400,
     advancePaid: 17600,
     tireQuantity: 300,
     costPaid: 40000,
-    vendor: {
-      create: vendorData[1]
-    },
+    vendor: vendorData[1],
     nextPaymentDate: new Date('2021-12-12'),
     nextPaymentAmount: 18000,
   },
@@ -47,9 +45,6 @@ export const purchaseBillData = [
     advancePaid: 0,
     tireQuantity: 340,
     costPaid: 378600,
-    vendor: {
-      create: vendorData[0]
-    },
+    vendor: vendorData[0],
   },
-
-]
+];

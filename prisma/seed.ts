@@ -14,7 +14,7 @@ async function main() {
   // purchase bills
   // vendors
   for (const inventoryItem of tireInventory) {
-    await prisma.tireInventory.create(inventoryItem);
+    await prisma.tireInventory.create(inventoryItem).catch(console.log);
   }
 
   console.log('seeding complete...');

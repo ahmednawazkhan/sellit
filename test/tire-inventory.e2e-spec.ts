@@ -64,6 +64,7 @@ describe('Tire Inventory (e2e)', () => {
     defaultPurchaseBill = await purchaseBillService.create(
       createPurchaseBillMock
     );
+    //TODO: convert mocks to functions
     createTireInventoryMock.itemFileId = defaultItemFile.id;
     createTireInventoryMock.purchaseId = defaultPurchaseBill.id;
     defaultTireInventory = await tireInventoryService.create(
@@ -120,7 +121,7 @@ describe('Tire Inventory (e2e)', () => {
     const tireTwo = await tireInventoryService.create(TireInventoryTwo);
 
     return request(app.getHttpServer())
-      .get(`${basePath}/total`)
+      .get(`${basePath}/total-tires`)
       .expect(200)
       .expect(({ body }) => {
         expect(body).toStrictEqual({
@@ -149,13 +150,11 @@ describe('Tire Inventory (e2e)', () => {
 
     const tireTwo = await tireInventoryService.create(TireInventoryTwo);
     return request(app.getHttpServer())
-      .get(`${basePath}/quantity-purchase/${defaultPurchaseBill.id}`)
+      .get(`${basePath}/purchase-bill/${defaultPurchaseBill.id}/tire/quantity`)
       .expect(200)
       .expect(({ body }) => {
         expect(body).toStrictEqual({
-          _sum: {
-            quantity: defaultTireInventory.quantity + tireTwo.quantity,
-          },
+          quantity: defaultTireInventory.quantity + tireTwo.quantity,
         });
       });
   });
@@ -173,13 +172,11 @@ describe('Tire Inventory (e2e)', () => {
     const tireTwo = await tireInventoryService.create(TireInventoryTwo);
 
     return request(app.getHttpServer())
-      .get(`${basePath}/quantity-itemfile/${defaultItemFile.id}`)
+      .get(`${basePath}/itemfile/${defaultItemFile.id}/tire/quantity`)
       .expect(200)
       .expect(({ body }) => {
         expect(body).toStrictEqual({
-          sum: {
-            quantity: defaultTireInventory.quantity + tireTwo.quantity,
-          },
+          quantity: defaultTireInventory.quantity + tireTwo.quantity,
         });
       });
   });
@@ -268,17 +265,18 @@ describe('Tire Inventory (e2e)', () => {
     );
   });
 
-  it('should return all purchaseBill for given id (GET)', () => {
-    const purchaBillClone = {
+  it('should return purchase bill for given tire inventory item id (GET)', () => {
+    const purchaseBillClone = {
       ...defaultPurchaseBill,
+      billDate: defaultPurchaseBill.billDate.toISOString(),
       createdAt: defaultPurchaseBill.createdAt.toISOString(),
       updatedAt: defaultPurchaseBill.updatedAt.toISOString(),
     };
     return request(app.getHttpServer())
-      .get(`${basePath}/purchase-bill/${defaultTireInventory.id}`)
+      .get(`${basePath}/${defaultTireInventory.id}/purchase-bill`)
       .expect(200)
       .expect(({ body }) => {
-        expect(body).toStrictEqual(purchaBillClone);
+        expect(body).toStrictEqual(purchaseBillClone);
       });
   });
 
