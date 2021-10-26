@@ -142,13 +142,14 @@ describe('Vendor (e2e)', () => {
         expect(body).toEqual({});
       });
   });
-  it('should return purchase bills of a vendor with provided id (GET)', async () => {
+  it('should return all purchase bills for a given vendor id (GET)', async () => {
     createPurchaseBillMock.vendorId = defaultVendor.id;
     const purchaseBill = await purchaseBillService.create(
       createPurchaseBillMock
     );
     const purchaseBillClone = {
       ...purchaseBill,
+      billDate: purchaseBill.billDate.toISOString(),
       createdAt: purchaseBill.createdAt.toISOString(),
       updatedAt: purchaseBill.updatedAt.toISOString(),
     };
